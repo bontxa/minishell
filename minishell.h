@@ -1,23 +1,17 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: aboncine <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/11 12:18:21 by aboncine          #+#    #+#             */
-/*   Updated: 2023/01/11 15:06:51 by aboncine         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#ifndef MINISHELL_H
-#define MINISHELL_H
+#include <signal.h>
 #include <stdio.h>
-#include <readline/readline.h>
-#include <readline/history.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <readline/readline.h>
+#include <readline/history.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 char	**ft_split(char const *s, char c);
-
-#endif
+char	**get_paths(char **envp);
+void	execute_cmd(char *cmd, char **envp);
+char	*ft_strtrim(char const *s1, char const *set);
+char	*ft_strjoin(char const *s1, char const *s2);
+size_t	ft_strlen(const char *s);
+int		ft_strncmp(const char *s1, const char *s2, size_t n);
