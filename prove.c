@@ -75,6 +75,7 @@ int	main(int argc, char **argv, char **envp)
 	char	*tmp;
 	(void)argc;
 	(void)argv;
+	print_header();
 	shell_prompt = ft_strdup("@sovietshell: \033[0;37m");
 	tmp = ft_strjoin("\033[1;31m", getenv("LOGNAME"));
 	shell_prompt = ft_strjoin(tmp, shell_prompt);
