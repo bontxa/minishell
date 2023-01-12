@@ -6,7 +6,7 @@
 /*   By: aboncine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 12:47:52 by aboncine          #+#    #+#             */
-/*   Updated: 2023/01/11 18:11:56 by aboncine         ###   ########.fr       */
+/*   Updated: 2023/01/12 12:37:09 by aboncine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	manage_pwd(char **splitted)
 		printf("%s: command not found\n", splitted[0]);
 }
 
-int ft_cmp(char *s1, char *s2, int size)
+int	ft_cmp(char *s1, char *s2, int size)
 {
 	int i;
 
@@ -60,6 +60,36 @@ int ft_cmp(char *s1, char *s2, int size)
 		i++;
 	}
 	return (1);
+}
+
+int	ft_search_char(char *str, char c)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == c)
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+void manage_equal(char **splitted)
+{
+	int	i;
+
+	i = 0;
+	while (splitted[i])
+	{
+		if (ft_search_char(splitted[i], '='))
+		{
+			printf("GESTISCI =\n");
+			return;
+		}
+		i++;
+	}
 }
 
 
@@ -75,6 +105,10 @@ int main(int argc, char **argv, char **envp)
 		splitted = ft_split(prompt, ' ');
 		//printf("%s\n", getenv(prompt));
 		add_history (prompt);
+		//PROVO A IMPLEMENTARE '='
+
+
+		//
 		if (ft_cmp(prompt, "cd ", 3))
 			printf("%s\n", prompt);
 		if (ft_cmp(prompt, "echo ", 5))

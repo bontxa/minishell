@@ -6,85 +6,151 @@
 /*   By: aboncine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 10:28:17 by aboncine          #+#    #+#             */
-/*   Updated: 2023/01/11 15:02:16 by aboncine         ###   ########.fr       */
+/*   Updated: 2023/01/12 16:27:04 by aboncine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	countwords(char const *s, char c)
+#include <stdio.h>
+void	create_str(char const *s, char **splitted, char c)
+{
+	char	quote;
+	int		i;
+	int		num;
+	int		j;
+	int		size;
+	int		start;
+	int		flag;
+
+	i = 0;
+	num = 0;
+	j = 0;
+	size = 0;
+	while(s[i] == c && s[i])
+		i++;
+	while (s[i])
+	{
+		flag = 0;
+		if (s[i] == 34 || s[i] == 39)
+			quote = s[i];
+		if (s[i] == quote)
+		{
+			i++;
+			/* if (s[i] != quote)
+			{ */
+				start = i;
+				while (s[start] != quote)
+				{
+					size++;
+					start++;
+				}
+				splitted[num] = (char *) malloc(sizeof(char) * (size + 1));
+				if (!splitted[num])
+					return ;
+				while (j < size)
+				{
+					splitted[num][j++] = s[i++];
+				}
+				splitted[num][j] = '\0';
+				num++;
+				size = 0;
+				j = 0;
+			//}
+		}
+		else if (s[i] != c)
+		{
+			start = i;
+			while (s[start] != c && s[start])
+			{
+				if (s[start] == 34 || s[start] == 39)
+				{
+					flag = 1;
+					break ;
+				}
+				size++;
+				start++;
+			}
+			splitted[num] = (char *) malloc(sizeof(char) * (size + 1));
+			if (!splitted[num])
+				return ;
+			while (j < size)
+			{
+				splitted[num][j++] = s[i++];
+			}
+			splitted[num][j] = '\0';
+			num++;
+			size = 0;
+			j = 0;
+		}
+		if (flag == 0 && s[i] != '\0')
+			i++;
+	}
+	splitted[num] = 0;
+}
+
+int	count_words(char const *s, char c)
 {
 	int	count;
 	int	i;
-	int	check;
+	char	quote;
 
 	count = 0;
 	i = 0;
-	check = 0;
+	if (s[0] != c)
+		count++;
+	i++;
 	while (s[i])
 	{
-		if (s[i] != c && check == 0)
+		if (s[i] == 34 || s[i] == 39)
+			quote = s[i];
+		if (s[i] == quote)
 		{
-			count++;
-			check = 1;
+			i++;
+			//if (i == quote)
+			//	i++;
+			//else
+			if (i != quote)
+			{
+				while(s[i] != quote && s[i])
+					i++;
+				//i++;
+				count++;
+			}
 		}
-		else if (s[i] == c)
-			check = 0;
+		else if ((s[i -1] == c && s[i] != c) || (s[i -1] == quote && s[i] != c))
+			count++;
 		i++;
 	}
 	return (count);
 }
 
-static char	*c_words(char const *s, char c, int start)
-{
-	char	*new;
-	int		i;
-	int		begin;
-
-	i = 0;
-	begin = start;
-	while (s[start] != c && s[start] != '\0')
-	{
-		i++;
-		start++;
-	}
-	new = malloc (sizeof(char) * i + 1);
-	i = 0;
-	if (!new)
-		return (NULL);
-	while (s[begin] != c && s[begin] != '\0')
-	{
-		new[i] = s[begin];
-		i++;
-		begin++;
-	}
-	new[i] = '\0';
-	return (new);
-}
-
 char	**ft_split(char const *s, char c)
 {
 	char	**splitted;
-	int		i;
-	int		b;
-	int		check;
+	int		num_words;
 
-	splitted = (char **)malloc(sizeof(char *) * (countwords(s, c) + 1));
-	i = 0;
-	b = 0;
-	check = 0;
-	while (s[i])
+	num_words = count_words(s, c);
+	splitted = (char **) malloc(sizeof(char *) * (num_words + 1));
+	if (!splitted)
+		return (NULL);
+	create_str(s, splitted, c);
+
+	return (splitted);
+}
+
+int main()
+{
+	char const	*s = "ciao \"ofhjh iooyh fd'ffb' dqdqw\"perche";
+	char	**splitted;
+	int i = 0;
+
+	splitted = ft_split(s, ' ');
+	while(splitted[i])
 	{
-		if (s[i] != c && check == 0)
-		{
-			splitted[b] = c_words(s, c, i);
-			b++;
-			check = 1;
-		}
-		if (s[i] == c)
-			check = 0;
+		printf("%s\n", splitted[i]);
+		free(splitted[i]);
 		i++;
 	}
-	splitted[b] = NULL;
-	return (splitted);
+	free(splitted);
 }
