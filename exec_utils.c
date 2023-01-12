@@ -1,5 +1,33 @@
 #include "minishell.h"
 
+int		is_there_a_pipe(char *s)
+{
+	int	i;
+
+	i = 0;
+	while (s[i])
+	{
+		if (s[i] == '|')
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+int		check_for_pipes(char **s)
+{
+	int	i;
+
+	i = 0;
+	while (s[i] != 0)
+	{
+		if (is_there_a_pipe(s[i]) == 1)
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
 char	**get_paths(char **envp)
 {
 	int		i;
@@ -17,17 +45,17 @@ char	**get_paths(char **envp)
 	return (res);
 }
 
-void	execute_cmd(char *cmd, char **envp)
+void	execute_cmd(char **cmd_args, char **envp)
 {
 	int		i;
 	char	*tmp;
-	char	**cmd_args;
+	char	*cmd;
 	char	**cmd_paths;
 
 	i = 0;
-	cmd_args = ft_split(cmd, ' ');
-	if (access(cmd, F_OK) == 0)
-		execve(cmd, cmd_args, envp);
+	cmd = ft_strdup(cmd_args[0]);
+	if (access(cmd_args[0], F_OK) == 0)
+		execve(cmd_args[0], cmd_args, envp);
 	cmd_paths = get_paths(envp);
 	while (cmd_paths[i] != 0)
 	{
@@ -41,9 +69,11 @@ void	execute_cmd(char *cmd, char **envp)
 	}
 	if (cmd_paths[i] == 0)
 	{
-		printf("error");
+		printf("error\n");
 		exit(-1);
 	}
 	else
+	{
 		execve(cmd_paths[i], cmd_args, envp);
+	}
 }

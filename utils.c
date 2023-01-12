@@ -204,3 +204,22 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 	}
 	return (0);
 }
+
+char	*ft_strdup(const char *s)
+{
+	int		i;
+	char	*newstr;
+
+	i = ft_strlen(s);
+	newstr = malloc(sizeof(char) * i + 1);
+	if (!newstr)
+		return (NULL);
+	i = 0;
+	while (s[i])
+	{
+		newstr[i] = s[i];
+		i++;
+	}
+	newstr[i] = '\0';
+	return (newstr);
+}
