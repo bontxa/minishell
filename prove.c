@@ -71,13 +71,17 @@ int	main(int argc, char **argv, char **envp)
 	char	*res;
 	char	**cmd_args;
 	int		pid;
+	char	*shell_prompt;
+	char	*tmp;
 	(void)argc;
 	(void)argv;
-	print_header();
+	shell_prompt = ft_strdup("@sovietshell: \033[0;37m");
+	tmp = ft_strjoin("\033[1;31m", getenv("LOGNAME"));
+	shell_prompt = ft_strjoin(tmp, shell_prompt);
 	while (1)
 	{
 		signal(SIGINT, ft_signal_ctrl_c);
-		res = readline("\033[1;31mSovietshell: \033[0;37m");
+		res = readline(shell_prompt);
 		add_history(res);
 		cmd_args = ft_split(res, ' ');
 		cmd_args = variable_expander(cmd_args);
