@@ -17,3 +17,7 @@ size_t	ft_strlen(const char *s);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 char	**variable_expander(char **prompt);
 char	*ft_strdup(const char *s);
+char	**ft_simple_split(char const *s, char c);
+char	*extract_var(char *s);
+char	**parse_pipe_min_mag(char **prompt);
+

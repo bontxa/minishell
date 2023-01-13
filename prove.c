@@ -86,6 +86,13 @@ int	main(int argc, char **argv, char **envp)
 		add_history(res);
 		cmd_args = ft_split(res, ' ');
 		cmd_args = variable_expander(cmd_args);
+		cmd_args = parse_pipe_min_mag(cmd_args);
+		// int f = 0;
+		// while (cmd_args[f] != 0)
+		// {
+		// 	printf("%s\n", cmd_args[f]);
+		// 	f++;
+		// }
 		if (!cmd_args[0])
 			rl_redisplay();
 		else if (ft_strncmp(cmd_args[0], "exit", 4) == 0)

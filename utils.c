@@ -50,7 +50,7 @@ static char	*create_word(char const *s, char c, int start)
 	return (newword);
 }
 
-char	**ft_split(char const *s, char c)
+char	**ft_simple_split(char const *s, char c)
 {
 	char	**strarr;
 	int		i;

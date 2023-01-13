@@ -18,6 +18,9 @@ SRCS        :=      prove.c \
                           exec_utils.c \
                           variable_parser.c \
                           utils.c \
+						  ft_split.c \
+						  prove2.c \
+						  special_chars.c \
 
 OBJS        := $(SRCS:.c=.o)
 
