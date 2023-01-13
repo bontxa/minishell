@@ -6,12 +6,12 @@
 #    By: aboncine <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/03 08:35:03 by aboncine          #+#    #+#              #
-#    Updated: 2023/01/12 10:43:48 by aboncine         ###   ########.fr        #
+#    Updated: 2023/01/13 11:06:35 by aboncine         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
-SRCS = main.c
+SRCS = main.c ft_split.c
 OBJS = $(SRCS:.c=.o)
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
