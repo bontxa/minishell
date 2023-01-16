@@ -20,7 +20,7 @@ typedef struct s_prg
 typedef struct s_cmd
 {
 	char	**full_cmd;
-	char	*full_path;
+//	char	*full_path;
 	int	infile;
 	int	outfile;
 	t_cmd	*next;
