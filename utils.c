@@ -223,3 +223,20 @@ char	*ft_strdup(const char *s)
 	newstr[i] = '\0';
 	return (newstr);
 }
+
+char	*ft_strncpy(char *s, int start, int finish)
+{
+	char	*res;
+	int		i;
+
+	i = 0;
+	res = malloc(sizeof(char) * (finish - start + 1));
+	while (start < finish)
+	{
+		res[i] = s[start];
+		i++;
+		start++;
+	}
+	res[i] = '\0';
+	return (res);
+}

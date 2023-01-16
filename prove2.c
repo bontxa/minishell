@@ -27,6 +27,7 @@ char	*extract_var(char *s)
 	char	*res;
 	char	*prima;
 	char	*dopo;
+	char	*tmp;
 
 	i = 0;
 	x = 0;
@@ -42,20 +43,30 @@ char	*extract_var(char *s)
 		res = malloc(2);
 		res[0] = s[b];
 		res[1] = '\0';
-		return (res);
-	}
-	while ((s[i] >= 'a' && s[i] <= 'z') || (s[i] >= 'A' && s[i] <= 'Z') || (s[i] >= '0' && s[i] <= '9') || s[i] == '_')
-		i++;
-	res = malloc (sizeof(char) * (i - b + 1));
-	while (b < i)
-	{
-		res[x] = s[b];
-		x++;
 		b++;
+		i++;
 	}
-	res[x] = '\0';
+	else
+	{
+		while ((s[i] >= 'a' && s[i] <= 'z') || (s[i] >= 'A' && s[i] <= 'Z') || (s[i] >= '0' && s[i] <= '9') || s[i] == '_')
+			i++;
+		res = malloc (sizeof(char) * (i - b + 1));
+		while (b < i)
+		{
+			res[x] = s[b];
+			x++;
+			b++;
+		}
+		res[x] = '\0';
+	}
 	dopo = ft_strncpy(s, i, ft_strlen(s));
-	res = ft_strjoin(prima, getenv(res));
+	tmp = getenv(res);
+	if (!tmp)
+	{
+		tmp = malloc(1);
+		tmp[0] = '\0';
+	}
+	res = ft_strjoin(prima, tmp);
 	res = ft_strjoin(res, dopo);
 	return (res);
 }

@@ -58,7 +58,7 @@ void	ft_signal_ctrl_c(int sig)
 {
 	(void)sig;
 	printf("\n");
-	rl_replace_line("", 0);
+	//rl_replace_line("", 0); commentata per mac
 	rl_on_new_line();
 	rl_redisplay();
 }
@@ -87,12 +87,12 @@ int	main(int argc, char **argv, char **envp)
 		cmd_args = ft_split(res, ' ');
 		cmd_args = variable_expander(cmd_args);
 		cmd_args = parse_pipe_min_mag(cmd_args);
-		// int f = 0;
-		// while (cmd_args[f] != 0)
-		// {
-		// 	printf("%s\n", cmd_args[f]);
-		// 	f++;
-		// }
+		int f = 0;
+		while (cmd_args[f] != 0)
+		{
+			printf("%s\n", cmd_args[f]);
+			f++;
+		}
 		if (!cmd_args[0])
 			rl_redisplay();
 		else if (ft_strncmp(cmd_args[0], "exit", 4) == 0)
@@ -138,3 +138,4 @@ int	main(int argc, char **argv, char **envp)
 	}
 	return (0);
 }
+
