@@ -13,6 +13,7 @@ int		how_many_special(char **prompt, char c)
 			count++;
 		b++;
 	}
+	return (count);
 }
 
 int		arr_len_before_s_c(char **prompt, int start)
@@ -40,26 +41,48 @@ void	create_cmd(char **prompt, t_cmd *cmd, int start)
 		start++;
 		i++;
 	}
+	cmd->full_cmd[i] = 0;
+	i = 0;
+	while (cmd->full_cmd[i] != 0)
+	{
+		printf("%s\n", cmd->full_cmd[i]);
+		i++;
+	}
 }
 
 void	populate_cmd(char **prompt, t_prg *box)
 {
 	int	b;
 	int	flag;
+	int	i;
 
 	b = 0;
+	i = 0;
 	flag = 0;
-	box->cmds = (t_list *) malloc(sizeof(t_list) * (how_many_special(prompt, '|') + 1));
+	box->cmds = (t_cmd *) malloc(sizeof(t_cmd) * (how_many_special(prompt, '|') + 1));
 	while (prompt[b] != 0)
 	{
 		if (flag == 0)
 		{
-			box->cmds->content =
+			create_cmd(prompt, &box->cmds[i], b);
+			flag = 1;
+			b++;
+			i++;
 		}
+		if (prompt[b][0] == '|')
+		{
+			flag = 0;
+		}
+		b++;
 	}
-
 }
 
+int	main(int argc, char **argv)
+{
+	t_prg	box;
+
+	populate_cmd(argv, &box);
+}
 
 //echo "hello      there" how are 'you 'doing? $USER |wc -l >outfile
 // echo

@@ -8,15 +8,11 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
-typedef	struct	s_list
-{
-	void			*content;
-	struct s_list	*next;
-}				t_list;
+typedef struct s_cmd	t_cmd;
 
 typedef struct s_prg
 {
-	t_list	*cmds;
+	t_cmd	*cmds;
 	char	**envp;
 	pid_t	pid;
 }		t_prg;
@@ -27,6 +23,7 @@ typedef struct s_cmd
 	char	*full_path;
 	int	infile;
 	int	outfile;
+	t_cmd	*next;
 }		t_cmd;
 
 char	**ft_split(char const *s, char c);
@@ -43,4 +40,5 @@ char	*extract_var(char *s);
 char	**parse_pipe_min_mag(char **prompt);
 char	*ft_strncpy(char *s, int start, int finish);
 int		is_there_a_special_char(char *s);
+void	populate_cmd(char **prompt, t_prg *box);
 
