@@ -20,6 +20,7 @@ SRCS        :=      prove.c \
                           utils.c \
 						  ft_split.c \
 						  special_chars.c \
+						  list_utils.c \
 
 OBJS        := $(SRCS:.c=.o)
 

@@ -20,7 +20,6 @@ typedef struct s_prg
 typedef struct s_cmd
 {
 	char	**full_cmd;
-//	char	*full_path;
 	int	infile;
 	int	outfile;
 	t_cmd	*next;
@@ -40,5 +39,6 @@ char	*extract_var(char *s);
 char	**parse_pipe_min_mag(char **prompt);
 char	*ft_strncpy(char *s, int start, int finish);
 int		is_there_a_special_char(char *s);
-void	populate_cmd(char **prompt, t_prg *box);
+void	ft_add_element(t_cmd **cmd_list, char **cmd_arr);
+
 

@@ -1,5 +1,24 @@
 #include "minishell.h"
 
+void	ft_print_list(t_prg *box)
+{
+	int	i;
+
+	i = 0;
+	while (box->cmds)
+	{
+		while (box->cmds->full_cmd[i] != 0)
+		{
+			printf("%s\n", box->cmds->full_cmd[i]);
+			i++;
+		}
+		i = 0;
+		printf("CAMBIO\n");
+		box->cmds = box->cmds->next;
+	}
+}
+
+
 //PARTE PRINCIPALE DEL PROGRAMMA, STAMPA STALIN
 
 void	print_header()
@@ -73,9 +92,11 @@ int	main(int argc, char **argv, char **envp)
 	int		pid;
 	char	*shell_prompt;
 	char	*tmp;
+	t_prg	box;
 	(void)argc;
 	(void)argv;
 	print_header();
+	box.cmds = NULL;
 	shell_prompt = ft_strdup("@sovietshell: \033[0;37m");
 	tmp = ft_strjoin("\033[1;31m", getenv("LOGNAME"));
 	shell_prompt = ft_strjoin(tmp, shell_prompt);
@@ -88,13 +109,14 @@ int	main(int argc, char **argv, char **envp)
 		cmd_args = variable_expander(cmd_args);
 		cmd_args = parse_pipe_min_mag(cmd_args);
 		// t_prg box;
-		// populate_cmd(cmd_args, &box);
-		int f = 0;
-		while (cmd_args[f] != 0)
-		{
-			printf("%s\n", cmd_args[f]);
-			f++;
-		}
+		ft_add_element(&box.cmds, cmd_args);
+		ft_print_list(&box);
+		// int f = 0;
+		// while (cmd_args[f] != 0)
+		// {
+		// 	printf("%s\n", cmd_args[f]);
+		// 	f++;
+		// }
 		if (!cmd_args[0])
 			rl_redisplay();
 		else if (ft_strncmp(cmd_args[0], "exit", 4) == 0)

@@ -95,3 +95,10 @@ int	main(int argc, char **argv)
 // |
 // wc
 // -l
+
+// a.cmd[0] echo
+// a.cmd[1] hello    there
+
+
+// a.next.cmd[0] wc
+// a.next.cmd[1] -l
