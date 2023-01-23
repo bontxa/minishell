@@ -7,6 +7,7 @@
 #include <string.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <fcntl.h>
 
 typedef struct s_cmd	t_cmd;
 
@@ -41,5 +42,6 @@ char	*ft_strncpy(char *s, int start, int finish);
 int		is_there_a_special_char(char *s);
 void	ft_add_element(t_cmd **cmd_list, char **cmd_arr);
 void	ft_clean_list(t_cmd *comandi);
+void	ft_simple_echo(char **to_print, int n);
 
 

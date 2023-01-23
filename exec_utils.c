@@ -51,29 +51,54 @@ void	execute_cmd(char **cmd_args, char **envp)
 	char	*tmp;
 	char	*cmd;
 	char	**cmd_paths;
+	char	cwd[1024];
 
 	i = 0;
-	cmd = ft_strdup(cmd_args[0]);
-	if (access(cmd_args[0], F_OK) == 0)
-		execve(cmd_args[0], cmd_args, envp);
-	cmd_paths = get_paths(envp);
-	while (cmd_paths[i] != 0)
+	if (ft_strncmp(cmd_args[0], "pwd", 3) == 0)
 	{
-		tmp = ft_strjoin(cmd_paths[i], "/");
-		free (cmd_paths[i]);
-		cmd_paths[i] = ft_strjoin(tmp, cmd_args[0]);
-		free(tmp);
-		if (access(cmd_paths[i], F_OK) == 0)
-			break;
-		i++;
+		getcwd(cwd, sizeof(cwd));
+		printf("%s\n", cwd);
+		exit(0);
 	}
-	if (cmd_paths[i] == 0)
+	else if (ft_strncmp(cmd_args[0], "echo", 4) == 0)
 	{
-		printf("error\n");
-		exit(-1);
+		if (!cmd_args[1])
+			printf("\n");
+		if (ft_strncmp(cmd_args[1], "-n", 2) == 0)
+		{
+			ft_simple_echo(cmd_args, 2);
+			exit(0);
+		}
+		else
+		{
+			ft_simple_echo(cmd_args, 1);
+			exit(0);
+		}
+		exit(0);
 	}
-	else
-	{
-		execve(cmd_paths[i], cmd_args, envp);
+	else {
+		cmd = ft_strdup(cmd_args[0]);
+		if (access(cmd_args[0], F_OK) == 0)
+			execve(cmd_args[0], cmd_args, envp);
+		cmd_paths = get_paths(envp);
+		while (cmd_paths[i] != 0)
+		{
+			tmp = ft_strjoin(cmd_paths[i], "/");
+			free (cmd_paths[i]);
+			cmd_paths[i] = ft_strjoin(tmp, cmd_args[0]);
+			free(tmp);
+			if (access(cmd_paths[i], F_OK) == 0)
+				break;
+			i++;
+		}
+		if (cmd_paths[i] == 0)
+		{
+			printf("error\n");
+			exit(-1);
+		}
+		else
+		{
+			execve(cmd_paths[i], cmd_args, envp);
+		}
 	}
 }

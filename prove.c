@@ -32,19 +32,19 @@ void	ft_execute_child(t_prg *box, char **envp)
 	{
 		waitpid(pid, NULL, 0);
 		close(pipa[1]);
-		dup2(pipa[0], 0);
+		dup2(pipa[0], box->cmds->infile);
 		close(pipa[0]);
 	}
 }
 
 void	ft_the_executer(t_prg *box, char **envp)
 {
-
 	while (box->cmds->next)
 	{
 		ft_execute_child(box, envp);
 		box->cmds = box->cmds->next;
 	}
+	dup2(box->cmds->outfile, 1);
 	execute_cmd(box->cmds->full_cmd, envp);
 }
 
@@ -63,6 +63,7 @@ void	ft_print_list(t_prg *box)
 			i++;
 		}
 		i = 0;
+		printf("outfile %d\n", tmp->outfile);
 		printf("CAMBIO\n");
 		tmp = tmp->next;
 	}
@@ -136,7 +137,7 @@ void	ft_signal_ctrl_c(int sig)
 
 int	main(int argc, char **argv, char **envp)
 {
-	char	cwd[1024];
+	//char	cwd[1024];
 	char	*res;
 	char	**cmd_args;
 	int		pid;
@@ -160,17 +161,17 @@ int	main(int argc, char **argv, char **envp)
 		cmd_args = ft_split(res, ' ');
 		cmd_args = variable_expander(cmd_args);
 		cmd_args = parse_pipe_min_mag(cmd_args);
-		// t_prg box;
+		// int f = 0;
+		// while (cmd_args[f] != 0)
+		// {
+		// 	printf("%s\n", cmd_args[f]);
+		// 	f++;
+		// }
+		// printf("--------\n");
 		ft_clean_list(box.cmds);
 		box.cmds = NULL;
 		ft_add_element(&box.cmds, cmd_args);
-		//ft_print_list(&box);
-		// // int f = 0;
-		// // while (cmd_args[f] != 0)
-		// // {
-		// // 	printf("%s\n", cmd_args[f]);
-		// // 	f++;
-		// // }
+		ft_print_list(&box);
 		if (!cmd_args[0])
 			rl_redisplay();
 		else if (ft_strncmp(cmd_args[0], "exit", 4) == 0)
@@ -185,29 +186,29 @@ int	main(int argc, char **argv, char **envp)
 			pid = fork();
 			if (pid == 0)
 			{
-				if (ft_strncmp(cmd_args[0], "pwd", 3) == 0)
-				{
-					getcwd(cwd, sizeof(cwd));
-					printf("%s\n", cwd);
-					exit(0);
-				}
-				else if (ft_strncmp(cmd_args[0], "echo", 4) == 0)
-				{
-					if (!cmd_args[1])
-						printf("\n");
-					if (ft_strncmp(cmd_args[1], "-n", 2) == 0)
-					{
-						ft_simple_echo(cmd_args, 2);
-						exit(0);
-					}
-					else
-					{
-						ft_simple_echo(cmd_args, 1);
-						exit(0);
-					}
-					exit(0);
-				}
-				else
+				// if (ft_strncmp(cmd_args[0], "pwd", 3) == 0)
+				// {
+				// 	getcwd(cwd, sizeof(cwd));
+				// 	printf("%s\n", cwd);
+				// 	exit(0);
+				// }
+				// else if (ft_strncmp(cmd_args[0], "echo", 4) == 0)
+				// {
+				// 	if (!cmd_args[1])
+				// 		printf("\n");
+				// 	if (ft_strncmp(cmd_args[1], "-n", 2) == 0)
+				// 	{
+				// 		ft_simple_echo(cmd_args, 2);
+				// 		exit(0);
+				// 	}
+				// 	else
+				// 	{
+				// 		ft_simple_echo(cmd_args, 1);
+				// 		exit(0);
+				// 	}
+				// 	exit(0);
+				// }
+				// else
 					ft_the_executer(&box, envp);
 			}
 			else

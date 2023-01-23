@@ -83,22 +83,3 @@ int	main(int argc, char **argv)
 
 	populate_cmd(argv, &box);
 }
-
-//echo "hello      there" how are 'you 'doing? $USER |wc -l >outfile
-// echo
-// hello      there
-// how
-// are
-// you
-// doing?
-// lapenji
-// |
-// wc
-// -l
-
-// a.cmd[0] echo
-// a.cmd[1] hello    there
-
-
-// a.next.cmd[0] wc
-// a.next.cmd[1] -l
