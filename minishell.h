@@ -40,5 +40,6 @@ char	**parse_pipe_min_mag(char **prompt);
 char	*ft_strncpy(char *s, int start, int finish);
 int		is_there_a_special_char(char *s);
 void	ft_add_element(t_cmd **cmd_list, char **cmd_arr);
+void	ft_clean_list(t_cmd *comandi);
 
 
