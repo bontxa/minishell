@@ -1,94 +1,222 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: aboncine <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/11 12:47:52 by aboncine          #+#    #+#             */
-/*   Updated: 2023/01/11 18:11:56 by aboncine         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
-
-/*
-1 - splittare prompt
-2 - analizzare prompt
-3 - controllare variabili env ($)
-4 - controllare pipe (|)
-*/
-
-void	manage_env(char **splitted, char **envp)
+void	ft_clean_list(t_cmd *comandi)
 {
-	int i = 0;
-	if ((splitted[0][3] == '\0') || (splitted[0][3] == ' '))
+	t_cmd	*tmp;
+	t_cmd	*tmp_2;
+
+	tmp = comandi;
+	while (tmp)
 	{
-		while(envp[i])
+		tmp_2 = tmp->next;
+		free (tmp);
+		tmp = tmp_2;
+	}
+}
+
+void	ft_execute_child(t_prg *box, char **envp)
+{
+	int	pipa[2];
+	int	pid;
+
+	pipe(pipa);
+	pid = fork();
+	if (pid == 0)
+	{
+		close(pipa[0]);
+		dup2(pipa[1], 1);
+		close(pipa[1]);
+		execute_cmd(box->cmds->full_cmd, envp);
+	}
+	else
+	{
+		waitpid(pid, NULL, 0);
+		close(pipa[1]);
+		dup2(pipa[0], box->cmds->infile);
+		close(pipa[0]);
+	}
+}
+
+void	ft_the_executer(t_prg *box, char **envp)
+{
+	while (box->cmds->next)
+	{
+		ft_execute_child(box, envp);
+		box->cmds = box->cmds->next;
+	}
+	dup2(box->cmds->outfile, 1);
+	execute_cmd(box->cmds->full_cmd, envp);
+}
+
+void	ft_print_list(t_prg *box)
+{
+	int	i;
+	t_cmd	*tmp;
+
+	tmp = box->cmds;
+	i = 0;
+	while (tmp)
+	{
+		while (tmp->full_cmd[i] != 0)
 		{
-			printf("%s\n", envp[i]);
+			printf("%s\n", tmp->full_cmd[i]);
 			i++;
 		}
+		i = 0;
+		printf("outfile %d\n", tmp->outfile);
+		printf("CAMBIO\n");
+		tmp = tmp->next;
 	}
-	/* else if ((splitted[1] != 0 && splitted[1][0] == '|') || splitted[0][6] == '|')
-		printf("GESTISCI PIPE\n"); */
-	else
-		printf("%s: command not found\n", splitted[0]);
 }
 
-void	manage_pwd(char **splitted)
+
+//PARTE PRINCIPALE DEL PROGRAMMA, STAMPA STALIN
+
+void	print_header()
 {
-	char path[256];
-	if (splitted[0][3] == '\0'|| splitted[0][3] == ' ')
-		printf("%s\n", getcwd(path, sizeof(path)));
-	/* else if ((splitted[1] != 0 && splitted[1][0] == '|') || splitted[0][3] == '|')
-		printf("GESTISCI PIPE\n"); */
-	else
-		printf("%s: command not found\n", splitted[0]);
+	printf("\033[1;31m	⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣶⣶⣿⣿⣿⣿⣿⣶⣶⣤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n");
+	printf("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣾⣿⣿⣿⣻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n");
+	printf("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣼⣿⣿⠿⠿⠿⣿⣿⣿⣿⣿⣿⢿⣿⣿⣿⣿⣿⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n");
+	printf("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⡿⠃⠀⠀⠀⠀⠀⠈⠉⠁⠀⠀⠈⠙⣿⣿⣿⣷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n");
+	printf("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣿⠇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n");
+	printf("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡟⢠⠶⠶⣦⣄⠀⠀⣀⣤⣶⡶⢶⣄⠀⠀⢿⣿⣿⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n");
+	printf("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡇⢸⡿⢿⣷⡷⠀⠀⢿⣶⠿⠷⠦⣙⡀⠀⢸⣿⡿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n");
+	printf("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⠇⠀⠀⠉⠉⠀⠀⠀⠀⠉⠒⠒⠂⠈⠁⠀⠀⢿⣿⣆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n");
+	printf("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⡄⠀⠀⢀⠴⣧⣀⣤⣤⣵⣄⠀⠀⠀⠀⠀⠀⢰⣿⡟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n");
+	printf("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢻⡇⠀⢠⣮⣴⣷⣶⣿⣷⣶⣬⡂⠀⠀⠀⠀⢀⠞⢽⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n");
+	printf("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⢧⢤⣼⣿⣿⠿⡿⠻⠿⣿⣿⣿⣦⡀⠀⠀⣼⠒⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n");
+	printf("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⡄⠈⠉⠀⠀⠿⠿⠿⠉⠛⠛⠃⠀⠀⠀⠇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n");
+	printf("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣵⡀⢀⠀⠀⢀⡠⢀⠀⠀⠀⢀⡀⠀⢸⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n");
+	printf("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣾⣿⣿⣦⡉⠐⠚⠳⣿⡗⠒⠊⠁⠀⢀⣾⣧⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n");
+	printf("⠀⠀⠀⠀⢀⣀⣠⣤⣶⣺⣿⣿⣿⣿⣿⣿⣦⣄⠀⣿⣇⠀⠀⠀⣠⣾⣿⣿⣿⡦⢤⣄⣀⡀⠀⠀⠀⠀⠀⠀⠀\n");
+	printf("⠀⠀⣴⣮⣩⣤⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣯⡛⠿⣦⣴⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣭⣉⣓⣶⣄⠀⠀⠀\n");
+	printf("⢀⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣇⣨⣿⣿⣿⣿⣿⣷⣾⣿⣿⣿⣿⣏⠉⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣧⡀⠀\n");
+	printf("⣸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡏⠉⠹⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⡀\n");
+	printf("⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣤⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿\n");
+	printf("⠀⠀⠀⠈⠉⠉⠉⠛⠛⠛⠻⠿⠿⠿⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠿⠟⠛⠋⠉⠁⠀⠀\n");
+	printf("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠛⠛⠿⢿⣿⣿⡿⠿⠛⠛⠋⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\033[1;37m\n");
+	printf("			WELCOME TO SOVIETSHELL				\n");
+
 }
 
-int ft_cmp(char *s1, char *s2, int size)
-{
-	int i;
+//SOSTITUISCE ECHO E ECHO -N
 
-	i = 0;
-	while (i < size)
+void	ft_simple_echo(char **to_print, int n)
+{
+	int	tmp;
+
+	tmp = n;
+	if (!to_print && n == 1)
+		return;
+	else
 	{
-		if (s1[i] != s2[i])
-			return (0);
-		i++;
+		while (to_print[n] != 0)
+		{
+			printf("%s", to_print[n]);
+			if (to_print[n + 1] != 0)
+				printf(" ");
+			n++;
+		}
 	}
-	return (1);
+	if (tmp == 1)
+		printf("\n");
 }
 
+//INTERCETTA CTRL + C E NON FA USCIRE DA MINISHELL
 
-int main(int argc, char **argv, char **envp)
+void	ft_signal_ctrl_c(int sig)
 {
-	char	*prompt;
-	char	**splitted;
-	(void) argc;
-	(void) argv;
+	(void)sig;
+	printf("\n");
+	rl_replace_line("", 0);
+	rl_on_new_line();
+	rl_redisplay();
+}
+
+//MAIN
+
+int	main(int argc, char **argv, char **envp)
+{
+	//char	cwd[1024];
+	char	*res;
+	char	**cmd_args;
+	int		pid;
+	char	*shell_prompt;
+	char	*tmp;
+	t_prg	box;
+	(void)argc;
+	(void)argv;
+	print_header();
+	box.cmds = NULL;
+	shell_prompt = ft_strdup("@sovietshell: \033[0;37m");
+	tmp = ft_strjoin("\033[1;31m", getenv("LOGNAME"));
+	shell_prompt = ft_strjoin(tmp, shell_prompt);
 	while (1)
 	{
-		prompt = readline("minishell$ ");
-		splitted = ft_split(prompt, ' ');
-		//printf("%s\n", getenv(prompt));
-		add_history (prompt);
-		if (ft_cmp(prompt, "cd ", 3))
-			printf("%s\n", prompt);
-		if (ft_cmp(prompt, "echo ", 5))
-			printf("%s\n", prompt);
-		if (ft_cmp(prompt, "pwd", 3))
-			manage_pwd(splitted);
-		if (ft_cmp(prompt, "export", 6))
-			printf("%s\n", prompt);
-		if (ft_cmp(prompt, "unset", 5))
-			printf("%s\n", prompt);
-		if (ft_cmp(prompt, "env", 3))
-			manage_env(splitted, envp);
-		if (ft_cmp(prompt, "exit", 4))
-			printf("%s\n", prompt);
+		printf("sono in cima\n");
+		signal(SIGINT, ft_signal_ctrl_c);
+		res = readline(shell_prompt);
+		printf("res = %s\n", res);
+		add_history(res);
+		cmd_args = ft_split(res, ' ');
+		cmd_args = variable_expander(cmd_args);
+		cmd_args = parse_pipe_min_mag(cmd_args);
+		// int f = 0;
+		// while (cmd_args[f] != 0)
+		// {
+		// 	printf("%s\n", cmd_args[f]);
+		// 	f++;
+		// }
+		// printf("--------\n");
+		ft_clean_list(box.cmds);
+		box.cmds = NULL;
+		ft_add_element(&box.cmds, cmd_args);
+		ft_print_list(&box);
+		if (!cmd_args[0])
+			rl_redisplay();
+		else if (ft_strncmp(cmd_args[0], "exit", 4) == 0)
+			exit(0);
+		else if (ft_strncmp(cmd_args[0], "cd", 2) == 0)
+		{
+			if(chdir(cmd_args[1]) == -1)
+				printf("cd: no such file or directory: %s\n", cmd_args[1]);
+		}
+		else
+		{
+			pid = fork();
+			if (pid == 0)
+			{
+				// if (ft_strncmp(cmd_args[0], "pwd", 3) == 0)
+				// {
+				// 	getcwd(cwd, sizeof(cwd));
+				// 	printf("%s\n", cwd);
+				// 	exit(0);
+				// }
+				// else if (ft_strncmp(cmd_args[0], "echo", 4) == 0)
+				// {
+				// 	if (!cmd_args[1])
+				// 		printf("\n");
+				// 	if (ft_strncmp(cmd_args[1], "-n", 2) == 0)
+				// 	{
+				// 		ft_simple_echo(cmd_args, 2);
+				// 		exit(0);
+				// 	}
+				// 	else
+				// 	{
+				// 		ft_simple_echo(cmd_args, 1);
+				// 		exit(0);
+				// 	}
+				// 	exit(0);
+				// }
+				// else
+					ft_the_executer(&box, envp);
+			}
+			else
+			{
+				wait(NULL);
+			}
+		}
 	}
-
+	return (0);
 }
+

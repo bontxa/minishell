@@ -6,13 +6,13 @@
 /*   By: aboncine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 10:28:17 by aboncine          #+#    #+#             */
-/*   Updated: 2023/01/13 11:37:12 by aboncine         ###   ########.fr       */
+/*   Updated: 2023/01/24 13:11:07 by aboncine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*create_str4(char const *s, int *i, int *size)
+/* char	*create_str4(char const *s, int *i, int *size)
 {
 	char	*res;
 	int		j;
@@ -51,7 +51,7 @@ char	*create_str3(char const *s, int *i, int *flag, char *c)
 	}
 	return (create_str4(s, i, &size));
 }
-
+ */
 char	*create_str2(char const *s, int *i, char *quote)
 {
 	int		start;
@@ -67,7 +67,7 @@ char	*create_str2(char const *s, int *i, char *quote)
 		size++;
 	res = (char *) malloc(sizeof(char) * (size + 1));
 	if (!res)
-		return (NULL) ;
+		return (NULL);
 	while (j < size)
 	{
 		res[j++] = s[*i];
@@ -86,7 +86,7 @@ void	create_str(char const *s, char **splitted, char c)
 
 	i = 0;
 	num = 0;
-	while(s[i] == c && s[i])
+	while (s[i] == c && s[i])
 		i++;
 	while (s[i])
 	{
@@ -116,12 +116,13 @@ int	count_words2(char const *s, int *i, int count, char c)
 			*i = *i + 1;
 			if (*i != quote)
 			{
-				while(s[*i] != quote && s[*i])
+				while (s[*i] != quote && s[*i])
 					*i = *i + 1;
 				count++;
 			}
 		}
-		else if ((s[*i -1] == c && s[*i] != c) || (s[*i -1] == quote && s[*i] != c))
+		else if ((s[*i -1] == c && s[*i] != c)
+			|| (s[*i -1] == quote && s[*i] != c))
 			count++;
 		*i = *i + 1;
 	}

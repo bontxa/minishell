@@ -1,5 +1,17 @@
-#include "minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aboncine <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/01/24 12:44:01 by aboncine          #+#    #+#             */
+/*   Updated: 2023/01/24 13:20:36 by aboncine         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
+#include "minishell.h"
+/*
 static int	countwords(char const *s, char c)
 {
 	int	count;
@@ -77,8 +89,8 @@ char	**ft_simple_split(char const *s, char c)
 	}
 	strarr[b] = NULL;
 	return (strarr);
-}
-
+} */
+/*
 static size_t	count_c_s(char const *s1, char const *set)
 {
 	size_t	i;
@@ -151,7 +163,7 @@ char	*ft_strtrim(char const *s1, char const *set)
 	}
 	newstr[i] = '\0';
 	return (newstr);
-}
+} */
 
 char	*ft_strjoin(char const *s1, char const *s2)
 {

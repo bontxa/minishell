@@ -1,64 +1,36 @@
-#  |  |  ___ \    \  |         |
-#  |  |     ) |  |\/ |   _  |  |  /   _
-# ___ __|  __/   |   |  (   |    <    __/
-#    _|  _____| _|  _| \__,_| _|\_\ \___|
-#                              by jcluzet
-################################################################################
-#                                     CONFIG                                   #
-################################################################################
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: aboncine <marvin@42.fr>                    +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2023/01/24 12:45:42 by aboncine          #+#    #+#              #
+#    Updated: 2023/01/24 13:42:26 by aboncine         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
 
-NAME        := minishell
-CC        := cc
-FLAGS    := -Wall -Wextra -Werror
-################################################################################
-#                                 PROGRAM'S SRCS                               #
-################################################################################
+NAME = minishell
+SRCS = main.c exec_utils.c variable_parser.c utils.c utils2.c utils3.c \
+	parse_and_split.c ft_split.c special_chars.c list_utils.c
+OBJS = $(SRCS:.c=.o)
+CC = cc
+CFLAGS = -Wall -Wextra -Werror
 
-SRCS        :=      prove.c \
-                          exec_utils.c \
-                          variable_parser.c \
-                          utils.c \
-						  ft_split.c \
-						  special_chars.c \
-						  list_utils.c \
+%.o: %.c
+	$(CC) -c $(CFLAGS) $?
 
-OBJS        := $(SRCS:.c=.o)
+all: $(NAME)
 
-.c.o:
-	${CC} ${FLAGS} -c $< -o ${<:.c=.o}
-
-################################################################################
-#                                  Makefile  objs                              #
-################################################################################
-
-
-CLR_RMV		:= \033[0m
-RED		    := \033[1;31m
-GREEN		:= \033[1;32m
-YELLOW		:= \033[1;33m
-BLUE		:= \033[1;34m
-CYAN 		:= \033[1;36m
-RM		    := rm -f
-
-${NAME}:	${OBJS}
-			@echo "$(GREEN)Compilation ${CLR_RMV}of ${YELLOW}$(NAME) ${CLR_RMV}..."
-			${CC} ${FLAGS} -o ${NAME} ${OBJS} -lreadline
-			@echo "$(GREEN)$(NAME) created[0m ✔️"
-
-all:		${NAME}
-
-bonus:		all
+$(NAME): $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) -lreadline
 
 clean:
-			@ ${RM} *.o */*.o */*/*.o
-			@ echo "$(RED)Deleting $(CYAN)$(NAME) $(CLR_RMV)objs ✔️"
+	rm -f $(OBJS)
 
-fclean:		clean
-			@ ${RM} ${NAME}
-			@ echo "$(RED)Deleting $(CYAN)$(NAME) $(CLR_RMV)binary ✔️"
+fclean: clean
+	rm -f $(NAME)
 
-re:			fclean all
+re: fclean all
 
-.PHONY:		all clean fclean re
-
-
+.PHONY: all clean fclean re .c.o

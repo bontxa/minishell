@@ -1,13 +1,27 @@
-#include <signal.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <string.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <fcntl.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aboncine <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/01/24 12:45:27 by aboncine          #+#    #+#             */
+/*   Updated: 2023/01/24 13:17:08 by aboncine         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef MINISHELL_H
+# define MINISHELL_H
+# include <signal.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <unistd.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <string.h>
+# include <sys/types.h>
+# include <sys/wait.h>
+# include <fcntl.h>
 
 typedef struct s_cmd	t_cmd;
 
@@ -21,8 +35,8 @@ typedef struct s_prg
 typedef struct s_cmd
 {
 	char	**full_cmd;
-	int	infile;
-	int	outfile;
+	int		infile;
+	int		outfile;
 	t_cmd	*next;
 }		t_cmd;
 
@@ -43,5 +57,11 @@ int		is_there_a_special_char(char *s);
 void	ft_add_element(t_cmd **cmd_list, char **cmd_arr);
 void	ft_clean_list(t_cmd *comandi);
 void	ft_simple_echo(char **to_print, int n);
+char	*ft_create_sc_word(char *s, int start, int i);
+int		how_many_strings(char **prompt);
+int		how_many_strings_with_s_c(char *s);
+int		is_there_a_special_char(char *s);
+int		how_many_special_chars(char *s);
+char	*create_str3(char const *s, int *i, int *flag, char *c);
 
-
+#endif
