@@ -16,6 +16,7 @@ void	ft_clean_list(t_cmd *comandi)
 
 void	ft_execute_child(t_prg *box, char **envp)
 {
+	int	exitStatus;
 	int	pipa[2];
 	int	pid;
 
@@ -30,7 +31,8 @@ void	ft_execute_child(t_prg *box, char **envp)
 	}
 	else
 	{
-		waitpid(pid, NULL, 0);
+		waitpid(pid, &exitStatus, 0);
+		printf("exit status = %d\n", exitStatus);
 		close(pipa[1]);
 		dup2(pipa[0], box->cmds->infile);
 		close(pipa[0]);
@@ -39,6 +41,10 @@ void	ft_execute_child(t_prg *box, char **envp)
 
 void	ft_the_executer(t_prg *box, char **envp)
 {
+	if (box->cmds->infile == 1025)
+		here_doc_handler(box->cmds->delimiter);
+	else
+		dup2(box->cmds->infile, 0);
 	while (box->cmds->next)
 	{
 		ft_execute_child(box, envp);
@@ -60,10 +66,11 @@ void	ft_print_list(t_prg *box)
 		while (tmp->full_cmd[i] != 0)
 		{
 			printf("%s\n", tmp->full_cmd[i]);
+			if (tmp->infile == 1025)
+				printf("delimitatore %s\n", tmp->delimiter);
 			i++;
 		}
 		i = 0;
-		printf("outfile %d\n", tmp->outfile);
 		printf("CAMBIO\n");
 		tmp = tmp->next;
 	}
@@ -153,21 +160,14 @@ int	main(int argc, char **argv, char **envp)
 	shell_prompt = ft_strjoin(tmp, shell_prompt);
 	while (1)
 	{
-		printf("sono in cima\n");
+		// printf("sono in cima\n");
 		signal(SIGINT, ft_signal_ctrl_c);
 		res = readline(shell_prompt);
-		printf("res = %s\n", res);
+		//printf("res = %s\n", res);
 		add_history(res);
 		cmd_args = ft_split(res, ' ');
 		cmd_args = variable_expander(cmd_args);
 		cmd_args = parse_pipe_min_mag(cmd_args);
-		// int f = 0;
-		// while (cmd_args[f] != 0)
-		// {
-		// 	printf("%s\n", cmd_args[f]);
-		// 	f++;
-		// }
-		// printf("--------\n");
 		ft_clean_list(box.cmds);
 		box.cmds = NULL;
 		ft_add_element(&box.cmds, cmd_args);
@@ -185,36 +185,9 @@ int	main(int argc, char **argv, char **envp)
 		{
 			pid = fork();
 			if (pid == 0)
-			{
-				// if (ft_strncmp(cmd_args[0], "pwd", 3) == 0)
-				// {
-				// 	getcwd(cwd, sizeof(cwd));
-				// 	printf("%s\n", cwd);
-				// 	exit(0);
-				// }
-				// else if (ft_strncmp(cmd_args[0], "echo", 4) == 0)
-				// {
-				// 	if (!cmd_args[1])
-				// 		printf("\n");
-				// 	if (ft_strncmp(cmd_args[1], "-n", 2) == 0)
-				// 	{
-				// 		ft_simple_echo(cmd_args, 2);
-				// 		exit(0);
-				// 	}
-				// 	else
-				// 	{
-				// 		ft_simple_echo(cmd_args, 1);
-				// 		exit(0);
-				// 	}
-				// 	exit(0);
-				// }
-				// else
-					ft_the_executer(&box, envp);
-			}
+				ft_the_executer(&box, envp);
 			else
-			{
 				wait(NULL);
-			}
 		}
 	}
 	return (0);

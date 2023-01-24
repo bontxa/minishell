@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aboncine <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ltombell <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 12:45:27 by aboncine          #+#    #+#             */
-/*   Updated: 2023/01/24 13:17:08 by aboncine         ###   ########.fr       */
+/*   Updated: 2023/01/24 15:37:49 by ltombell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <fcntl.h>
+# include "get_next_line.h"
 
 typedef struct s_cmd	t_cmd;
 
@@ -37,6 +38,7 @@ typedef struct s_cmd
 	char	**full_cmd;
 	int		infile;
 	int		outfile;
+	char	*delimiter;
 	t_cmd	*next;
 }		t_cmd;
 
@@ -63,5 +65,6 @@ int		how_many_strings_with_s_c(char *s);
 int		is_there_a_special_char(char *s);
 int		how_many_special_chars(char *s);
 char	*create_str3(char const *s, int *i, int *flag, char *c);
+void	here_doc_handler(char *delim);
 
 #endif

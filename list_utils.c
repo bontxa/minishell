@@ -3,14 +3,66 @@
 /*                                                        :::      ::::::::   */
 /*   list_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aboncine <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ltombell <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 12:07:52 by aboncine          #+#    #+#             */
-/*   Updated: 2023/01/24 13:13:49 by aboncine         ###   ########.fr       */
+/*   Updated: 2023/01/24 15:16:50 by ltombell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+char	**ft_remove_from_arr(char **full_cmd, int i)
+{
+	int	b;
+	char **res;
+
+	b = 0;
+	i++;
+	while (full_cmd[b] != 0)
+		b++;
+	res = malloc(sizeof(char *) * (b - i + 1));
+	b = 0;
+	while (full_cmd[i] != 0)
+		res[b++] = ft_strdup(full_cmd[i++]);
+	res[b] = 0;
+	return (res);
+}
+
+void	ft_check_for_minus(t_cmd *elem)
+{
+	int	i;
+
+	i = 0;
+	while (elem->full_cmd[i] != 0)
+	{
+		if (elem->full_cmd[i][0] == '<')
+		{
+			if (elem->full_cmd[i][1] && elem->full_cmd[i][1] == '<')
+			{
+				elem->infile = 1025;
+				elem->delimiter = ft_strdup(elem->full_cmd[i + 1]);
+				elem->full_cmd = ft_remove_from_arr(elem->full_cmd, i +1);
+			}
+			else
+			{
+				if (elem->full_cmd[i - 1])
+				{
+					elem->infile = open(elem->full_cmd[i - 1], O_RDONLY);
+					if (elem->infile < 0)
+						printf("unable to open file\n");
+				}
+				else
+				{
+					printf("errore nell'infile, parametro scorretto");
+					exit(-1);
+				}
+				elem->full_cmd = ft_remove_from_arr(elem->full_cmd, i);
+			}
+		}
+		i++;
+	}
+}
 
 char	**copy_to_list(char **prompt, int start)
 {
@@ -41,6 +93,7 @@ static t_cmd	*create_elem(char **strarr, int start)
 	elem->full_cmd = copy_to_list(strarr, start);
 	elem->outfile = 1;
 	elem->next = NULL;
+	ft_check_for_minus(elem);
 	return (elem);
 }
 
