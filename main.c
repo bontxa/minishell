@@ -161,6 +161,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	print_header();
+	exitStatus = 0;
 	box.cmds = NULL;
 	shell_prompt = ft_strdup("@sovietshell: \033[0;37m");
 	tmp = ft_strjoin("\033[1;31m", getenv("LOGNAME"));

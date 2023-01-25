@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   variable_parser.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aboncine <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ltombell <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 11:50:51 by aboncine          #+#    #+#             */
-/*   Updated: 2023/01/24 13:23:20 by aboncine         ###   ########.fr       */
+/*   Updated: 2023/01/25 15:14:58 by ltombell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,16 @@ static char	*extract_var_4(char *s, char *res, int *i, char	*prima)
 	char	*tmp;
 
 	dopo = ft_strncpy(s, *i, ft_strlen(s));
-	tmp = getenv(res);
-	if (!tmp)
+	if (res == NULL)
+		tmp = ft_itoa(exitStatus);
+	else
 	{
-		tmp = malloc(1);
-		tmp[0] = '\0';
+		tmp = getenv(res);
+		if (!tmp)
+		{
+			tmp = malloc(1);
+			tmp[0] = '\0';
+		}
 	}
 	res = ft_strjoin(prima, tmp);
 	res = ft_strjoin(res, dopo);
@@ -108,6 +113,11 @@ char	*extract_var(char *s)
 	if (s[i] == '$')
 		i++;
 	b = i;
+	if (s[b] == '?')
+	{
+		i++;
+		return (extract_var_4(s, res, &i, prima));
+	}
 	if (s[b] >= '0' && s[b] <= '9')
 		extract_var_2(s, res, &i, &b);
 	else
