@@ -1,5 +1,7 @@
 #include "minishell.h"
 
+int	exitStatus;
+
 void	ft_clean_list(t_cmd *comandi)
 {
 	t_cmd	*tmp;
@@ -14,30 +16,7 @@ void	ft_clean_list(t_cmd *comandi)
 	}
 }
 
-void	ft_execute_child(t_prg *box, char **envp)
-{
-	int	exitStatus;
-	int	pipa[2];
-	int	pid;
 
-	pipe(pipa);
-	pid = fork();
-	if (pid == 0)
-	{
-		close(pipa[0]);
-		dup2(pipa[1], 1);
-		close(pipa[1]);
-		execute_cmd(box->cmds->full_cmd, envp);
-	}
-	else
-	{
-		waitpid(pid, &exitStatus, 0);
-		printf("exit status = %d\n", exitStatus);
-		close(pipa[1]);
-		dup2(pipa[0], box->cmds->infile);
-		close(pipa[0]);
-	}
-}
 
 void	ft_the_executer(t_prg *box, char **envp)
 {
@@ -144,7 +123,6 @@ void	ft_signal_ctrl_c(int sig)
 
 int	main(int argc, char **argv, char **envp)
 {
-	//char	cwd[1024];
 	char	*res;
 	char	**cmd_args;
 	int		pid;
@@ -160,10 +138,14 @@ int	main(int argc, char **argv, char **envp)
 	shell_prompt = ft_strjoin(tmp, shell_prompt);
 	while (1)
 	{
-		// printf("sono in cima\n");
 		signal(SIGINT, ft_signal_ctrl_c);
+		signal(SIGQUIT, ft_signal_ctrl_c);
 		res = readline(shell_prompt);
-		//printf("res = %s\n", res);
+		if (res == NULL)
+		{
+			printf("signal\n");
+			exit (0);
+		}
 		add_history(res);
 		cmd_args = ft_split(res, ' ');
 		cmd_args = variable_expander(cmd_args);
@@ -187,7 +169,10 @@ int	main(int argc, char **argv, char **envp)
 			if (pid == 0)
 				ft_the_executer(&box, envp);
 			else
-				wait(NULL);
+			{
+				waitpid(pid, &exitStatus, 0);
+				printf("exit status: %d\n", exitStatus);
+			}
 		}
 	}
 	return (0);

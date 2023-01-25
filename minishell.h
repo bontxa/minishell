@@ -6,7 +6,7 @@
 /*   By: ltombell <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 12:45:27 by aboncine          #+#    #+#             */
-/*   Updated: 2023/01/24 15:37:49 by ltombell         ###   ########.fr       */
+/*   Updated: 2023/01/25 12:19:39 by ltombell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ typedef struct s_cmd
 	t_cmd	*next;
 }		t_cmd;
 
+extern int exitStatus;
+
 char	**ft_split(char const *s, char c);
 char	**get_paths(char **envp);
 void	execute_cmd(char **cmd_args, char **envp);
@@ -66,5 +68,6 @@ int		is_there_a_special_char(char *s);
 int		how_many_special_chars(char *s);
 char	*create_str3(char const *s, int *i, int *flag, char *c);
 void	here_doc_handler(char *delim);
+void	ft_execute_child(t_prg *box, char **envp);
 
 #endif

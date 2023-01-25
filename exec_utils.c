@@ -3,14 +3,38 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aboncine <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ltombell <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 12:12:33 by aboncine          #+#    #+#             */
-/*   Updated: 2023/01/24 12:12:37 by aboncine         ###   ########.fr       */
+/*   Updated: 2023/01/25 12:18:29 by ltombell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	ft_execute_child(t_prg *box, char **envp)
+{
+	int	pipa[2];
+	int	pid;
+
+	pipe(pipa);
+	pid = fork();
+	if (pid == 0)
+	{
+		close(pipa[0]);
+		dup2(pipa[1], 1);
+		close(pipa[1]);
+		execute_cmd(box->cmds->full_cmd, envp);
+	}
+	else
+	{
+		waitpid(pid, &exitStatus, 0);
+		printf("exit status = %d\n", exitStatus);
+		close(pipa[1]);
+		dup2(pipa[0], box->cmds->infile);
+		close(pipa[0]);
+	}
+}
 
 int		is_there_a_pipe(char *s)
 {
