@@ -16,7 +16,30 @@ void	ft_clean_list(t_cmd *comandi)
 	}
 }
 
+void	ft_execute_child(t_prg *box, char **envp)
+{
+	int	exitStatus;
+	int	pipa[2];
+	int	pid;
 
+	pipe(pipa);
+	pid = fork();
+	if (pid == 0)
+	{
+		close(pipa[0]);
+		dup2(pipa[1], 1);
+		close(pipa[1]);
+		execute_cmd(box->cmds->full_cmd, envp);
+	}
+	else
+	{
+		waitpid(pid, &exitStatus, 0);
+		printf("exit status = %d\n", exitStatus);
+		close(pipa[1]);
+		dup2(pipa[0], box->cmds->infile);
+		close(pipa[0]);
+	}
+}
 
 void	ft_the_executer(t_prg *box, char **envp)
 {
@@ -119,6 +142,12 @@ void	ft_signal_ctrl_c(int sig)
 	rl_redisplay();
 }
 
+void	ft_signal_ctrl_bs(int sig)
+{
+	(void)sig;
+	return ;
+}
+
 //MAIN
 
 int	main(int argc, char **argv, char **envp)
@@ -139,7 +168,7 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		signal(SIGINT, ft_signal_ctrl_c);
-		signal(SIGQUIT, ft_signal_ctrl_c);
+		signal(SIGQUIT, ft_signal_ctrl_bs);
 		res = readline(shell_prompt);
 		if (res == NULL)
 		{
