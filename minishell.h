@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ltombell <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aboncine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 12:45:27 by aboncine          #+#    #+#             */
-/*   Updated: 2023/01/24 15:37:49 by ltombell         ###   ########.fr       */
+/*   Updated: 2023/01/25 13:04:47 by aboncine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,5 +66,6 @@ int		is_there_a_special_char(char *s);
 int		how_many_special_chars(char *s);
 char	*create_str3(char const *s, int *i, int *flag, char *c);
 void	here_doc_handler(char *delim);
+void	ft_check_for_minus(t_cmd *elem);
 
 #endif

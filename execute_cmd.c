@@ -6,7 +6,7 @@
 /*   By: aboncine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 12:12:33 by aboncine          #+#    #+#             */
-/*   Updated: 2023/01/24 12:12:37 by aboncine         ###   ########.fr       */
+/*   Updated: 2023/01/25 13:09:39 by aboncine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int		check_for_pipes(char **s)
 	return (0);
 }
 
-char	**get_paths(char **envp)
+static char	**ft_get_paths(char **envp)
 {
 	int		i;
 	char	*tmp;
@@ -57,15 +57,55 @@ char	**get_paths(char **envp)
 	return (res);
 }
 
-void	execute_cmd(char **cmd_args, char **envp)
+static void	execute_cmd_3(char **cmd_args, char **envp)
 {
 	int		i;
 	char	*tmp;
-	char	*cmd;
 	char	**cmd_paths;
+
+	i = -1;
+	if (access(cmd_args[0], F_OK) == 0)
+		execve(cmd_args[0], cmd_args, envp);
+	cmd_paths = ft_get_paths(envp);
+	while (cmd_paths[++i] != 0)
+	{
+		tmp = ft_strjoin(cmd_paths[i], "/");
+		free (cmd_paths[i]);
+		cmd_paths[i] = ft_strjoin(tmp, cmd_args[0]);
+		free(tmp);
+		if (access(cmd_paths[i], F_OK) == 0)
+			break;
+	}
+	if (cmd_paths[i] == 0)
+	{
+		printf("error\n");
+		exit(-1);
+	}
+	else
+		execve(cmd_paths[i], cmd_args, envp);
+}
+
+static void	execute_cmd_2(char **cmd_args)
+{
+	if (!cmd_args[1])
+		printf("\n");
+	if (ft_strncmp(cmd_args[1], "-n", 2) == 0)
+	{
+		ft_simple_echo(cmd_args, 2);
+		exit(0);
+	}
+	else
+	{
+		ft_simple_echo(cmd_args, 1);
+		exit(0);
+	}
+	exit(0);
+}
+
+void	execute_cmd(char **cmd_args, char **envp)
+{
 	char	cwd[1024];
 
-	i = 0;
 	if (ft_strncmp(cmd_args[0], "pwd", 3) == 0)
 	{
 		getcwd(cwd, sizeof(cwd));
@@ -73,44 +113,7 @@ void	execute_cmd(char **cmd_args, char **envp)
 		exit(0);
 	}
 	else if (ft_strncmp(cmd_args[0], "echo", 4) == 0)
-	{
-		if (!cmd_args[1])
-			printf("\n");
-		if (ft_strncmp(cmd_args[1], "-n", 2) == 0)
-		{
-			ft_simple_echo(cmd_args, 2);
-			exit(0);
-		}
-		else
-		{
-			ft_simple_echo(cmd_args, 1);
-			exit(0);
-		}
-		exit(0);
-	}
-	else {
-		cmd = ft_strdup(cmd_args[0]);
-		if (access(cmd_args[0], F_OK) == 0)
-			execve(cmd_args[0], cmd_args, envp);
-		cmd_paths = get_paths(envp);
-		while (cmd_paths[i] != 0)
-		{
-			tmp = ft_strjoin(cmd_paths[i], "/");
-			free (cmd_paths[i]);
-			cmd_paths[i] = ft_strjoin(tmp, cmd_args[0]);
-			free(tmp);
-			if (access(cmd_paths[i], F_OK) == 0)
-				break;
-			i++;
-		}
-		if (cmd_paths[i] == 0)
-		{
-			printf("error\n");
-			exit(-1);
-		}
-		else
-		{
-			execve(cmd_paths[i], cmd_args, envp);
-		}
-	}
+		execute_cmd_2(cmd_args);
+	else
+		execute_cmd_3(cmd_args, envp);
 }
