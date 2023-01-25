@@ -81,7 +81,7 @@ void	ft_print_list(t_prg *box)
 
 //PARTE PRINCIPALE DEL PROGRAMMA, STAMPA STALIN
 
-void	print_header()
+void	ft_print_header()
 {
 	printf("\033[1;31m	⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣶⣶⣿⣿⣿⣿⣿⣶⣶⣤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n");
 	printf("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣾⣿⣿⣿⣻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n");
@@ -150,40 +150,76 @@ void	ft_signal_ctrl_bs(int sig)
 
 //MAIN
 
-int	main(int argc, char **argv, char **envp)
+static void	ft_main_part_3(char **cmd_args, t_prg box, char **envp)
+{
+	int		pid;
+
+	if (!cmd_args[0])
+		rl_redisplay();
+	else if (ft_strncmp(cmd_args[0], "exit", 4) == 0)
+		exit(0);
+	else if (ft_strncmp(cmd_args[0], "cd", 2) == 0)
+	{
+		if(chdir(cmd_args[1]) == -1)
+			printf("cd: no such file or directory: %s\n", cmd_args[1]);
+	}
+	else
+	{
+		pid = fork();
+		if (pid == 0)
+			ft_the_executer(&box, envp);
+		else
+		{
+			waitpid(pid, &exitStatus, 0);
+			printf("exit status: %d\n", exitStatus);
+		}
+	}
+}
+
+static char	**ft_main_part_2(char *shell_prompt)
 {
 	char	*res;
+	char **cmd_args;
+
+	signal(SIGINT, ft_signal_ctrl_c);
+	signal(SIGQUIT, ft_signal_ctrl_bs);
+	res = readline(shell_prompt);
+	if (res == NULL)
+	{
+		printf("signal\n");
+		exit (0);
+	}
+	add_history(res);
+	cmd_args = ft_split(res, ' ');
+	cmd_args = variable_expander(cmd_args);
+	cmd_args = parse_pipe_min_mag(cmd_args);
+	return (cmd_args);
+}
+
+int	main(int argc, char **argv, char **envp)
+{
 	char	**cmd_args;
-	int		pid;
+	//int		pid;
 	char	*shell_prompt;
 	char	*tmp;
 	t_prg	box;
+
 	(void)argc;
 	(void)argv;
-	print_header();
+	ft_print_header();
 	box.cmds = NULL;
 	shell_prompt = ft_strdup("@sovietshell: \033[0;37m");
 	tmp = ft_strjoin("\033[1;31m", getenv("LOGNAME"));
 	shell_prompt = ft_strjoin(tmp, shell_prompt);
 	while (1)
 	{
-		signal(SIGINT, ft_signal_ctrl_c);
-		signal(SIGQUIT, ft_signal_ctrl_bs);
-		res = readline(shell_prompt);
-		if (res == NULL)
-		{
-			printf("signal\n");
-			exit (0);
-		}
-		add_history(res);
-		cmd_args = ft_split(res, ' ');
-		cmd_args = variable_expander(cmd_args);
-		cmd_args = parse_pipe_min_mag(cmd_args);
+		cmd_args = ft_main_part_2(shell_prompt);
 		ft_clean_list(box.cmds);
 		box.cmds = NULL;
 		ft_add_element(&box.cmds, cmd_args);
 		ft_print_list(&box);
-		if (!cmd_args[0])
+		ft_main_part_3(cmd_args, box, envp);
+		/* if (!cmd_args[0])
 			rl_redisplay();
 		else if (ft_strncmp(cmd_args[0], "exit", 4) == 0)
 			exit(0);
@@ -202,7 +238,7 @@ int	main(int argc, char **argv, char **envp)
 				waitpid(pid, &exitStatus, 0);
 				printf("exit status: %d\n", exitStatus);
 			}
-		}
+		} */
 	}
 	return (0);
 }
