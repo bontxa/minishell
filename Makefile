@@ -3,17 +3,17 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ltombell <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: aboncine <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/24 12:45:42 by aboncine          #+#    #+#              #
-#    Updated: 2023/01/24 15:39:09 by ltombell         ###   ########.fr        #
+#    Updated: 2023/01/25 13:12:34 by aboncine         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
-SRCS = main.c exec_utils.c variable_parser.c utils.c utils2.c utils3.c \
-	parse_and_split.c ft_split.c special_chars.c list_utils.c here_doc.c \
-	get_next_line.c get_next_line_utils.c
+SRCS = main.c execute_cmd.c variable_parser.c utils.c utils2.c utils3.c \
+	parse_and_split.c ft_split.c special_chars.c check_for_minus.c here_doc.c \
+	get_next_line.c get_next_line_utils.c create_and_add_elem.c
 OBJS = $(SRCS:.c=.o)
 CC = cc
 CFLAGS = -Wall -Wextra -Werror

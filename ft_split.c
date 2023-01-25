@@ -6,52 +6,12 @@
 /*   By: aboncine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 10:28:17 by aboncine          #+#    #+#             */
-/*   Updated: 2023/01/24 13:11:07 by aboncine         ###   ########.fr       */
+/*   Updated: 2023/01/25 12:47:27 by aboncine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/* char	*create_str4(char const *s, int *i, int *size)
-{
-	char	*res;
-	int		j;
-
-	j = 0;
-	res = (char *) malloc(sizeof(char) * (*size + 1));
-	if (!res)
-		return (NULL);
-	while (j < *size)
-	{
-		res[j++] = s[*i];
-		*i += 1;
-	}
-	res[j] = '\0';
-	return (res);
-}
-
-char	*create_str3(char const *s, int *i, int *flag, char *c)
-{
-	int		start;
-	int		size;
-	int		j;
-
-	start = *i;
-	size = 0;
-	j = 0;
-	while (s[start] != *c && s[start])
-	{
-		if (s[start] == 34 || s[start] == 39)
-		{
-			*flag = 1;
-			break ;
-		}
-		size++;
-		start++;
-	}
-	return (create_str4(s, i, &size));
-}
- */
 char	*create_str2(char const *s, int *i, char *quote)
 {
 	int		start;
