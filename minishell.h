@@ -6,7 +6,7 @@
 /*   By: ltombell <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 12:45:27 by aboncine          #+#    #+#             */
-/*   Updated: 2023/01/25 14:52:03 by ltombell         ###   ########.fr       */
+/*   Updated: 2023/01/26 13:21:01 by ltombell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ typedef struct s_cmd	t_cmd;
 typedef struct s_prg
 {
 	t_cmd	*cmds;
-	char	**envp;
+	char	**envp_copy;
 	pid_t	pid;
 }		t_prg;
 
@@ -70,5 +70,9 @@ char	*create_str3(char const *s, int *i, int *flag, char *c);
 void	here_doc_handler(char *delim);
 void	ft_check_for_minus(t_cmd *elem);
 char	*ft_itoa(int n);
+char	**ft_dup_arr(char **arr);
+char	**ft_add_string_to_arr(char **arr, char *s);
+char	**ft_remove_string_from_arr(char **arr, char *str);
+void	ft_print_env_b();
 
 #endif

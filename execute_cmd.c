@@ -6,7 +6,7 @@
 /*   By: ltombell <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 12:12:33 by aboncine          #+#    #+#             */
-/*   Updated: 2023/01/25 13:19:49 by ltombell         ###   ########.fr       */
+/*   Updated: 2023/01/26 13:24:17 by ltombell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,11 @@ void	execute_cmd(char **cmd_args, char **envp)
 	{
 		getcwd(cwd, sizeof(cwd));
 		printf("%s\n", cwd);
+		exit(0);
+	}
+	else if (ft_strncmp(cmd_args[0], "env", 3) == 0)
+	{
+		ft_print_env_b();
 		exit(0);
 	}
 	else if (ft_strncmp(cmd_args[0], "echo", 4) == 0)

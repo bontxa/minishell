@@ -6,7 +6,7 @@
 /*   By: ltombell <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 11:50:51 by aboncine          #+#    #+#             */
-/*   Updated: 2023/01/25 15:14:58 by ltombell         ###   ########.fr       */
+/*   Updated: 2023/01/25 16:54:42 by ltombell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,10 @@ static char	*extract_var_4(char *s, char *res, int *i, char	*prima)
 	char	*tmp;
 
 	dopo = ft_strncpy(s, *i, ft_strlen(s));
-	if (res == NULL)
+	if (res[0] == '\0')
+	{
 		tmp = ft_itoa(exitStatus);
+	}
 	else
 	{
 		tmp = getenv(res);
@@ -71,7 +73,7 @@ static char	*extract_var_4(char *s, char *res, int *i, char	*prima)
 	return (res);
 }
 
-static void	extract_var_3(char *s, char *res, int *i, int *b)
+static char	*extract_var_3(char *s, char *res, int *i, int *b)
 {
 	int	x;
 
@@ -87,15 +89,17 @@ static void	extract_var_3(char *s, char *res, int *i, int *b)
 		*b = *b + 1;
 	}
 	res[x] = '\0';
+	return (res);
 }
 
-static void	extract_var_2(char *s, char *res, int *i, int *b)
+static char	*extract_var_2(char *s, char *res, int *i, int *b)
 {
 	res = malloc(2);
 	res[0] = s[*b];
 	res[1] = '\0';
 	*b = *b + 1;
 	*i = *i + 1;
+	return (res);
 }
 
 char	*extract_var(char *s)
@@ -116,11 +120,13 @@ char	*extract_var(char *s)
 	if (s[b] == '?')
 	{
 		i++;
+		res = malloc(2);
+		res[0] = '\0';
 		return (extract_var_4(s, res, &i, prima));
 	}
 	if (s[b] >= '0' && s[b] <= '9')
-		extract_var_2(s, res, &i, &b);
+		res = extract_var_2(s, res, &i, &b);
 	else
-		extract_var_3(s, res, &i, &b);
+		res = extract_var_3(s, res, &i, &b);
 	return (extract_var_4(s, res, &i, prima));
 }
