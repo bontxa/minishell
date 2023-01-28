@@ -6,7 +6,7 @@
 /*   By: ltombell <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 12:22:47 by aboncine          #+#    #+#             */
-/*   Updated: 2023/01/25 14:51:39 by ltombell         ###   ########.fr       */
+/*   Updated: 2023/01/28 12:24:58 by ltombell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,11 @@ char	*create_str3(char const *s, int *i, int *flag, char *c)
 {
 	int		start;
 	int		size;
-	int		j;
+	// int		j;
 
 	start = *i;
 	size = 0;
-	j = 0;
+	// j = 0;
 	while (s[start] != *c && s[start])
 	{
 		if (s[start] == 34 || s[start] == 39)

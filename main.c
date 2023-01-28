@@ -14,6 +14,33 @@ int	exitStatus;
 // 	}
 // }
 
+//CONTROLLA SE LE VARIABILI VANNO ESPANSE
+
+int		ft_is_var_inside_quotes(char *s)
+{
+	int	i;
+	int	flagApici;
+
+	flagApici = 0;
+	i = 0;
+	while (s[i])
+	{
+		if (s[i] == 39)
+		{
+			if (flagApici == 1)
+				flagApici = 0;
+			else
+				flagApici = 1;
+		}
+		if (s[i] == '$' && flagApici == 0)
+		{
+			return (0); //DA ESPANDERE
+		}
+		i++;
+	}
+	return (1); //NON VA ESPANSA
+}
+
 
 int	ft_is_there_an_equal(char *s)
 {
@@ -70,7 +97,7 @@ void	ft_execute_child(t_prg *box, char **envp)
 	else
 	{
 		waitpid(pid, &exitStatus, 0);
-		printf("exit status = %d\n", exitStatus);
+		//printf("exit status = %d\n", exitStatus);
 		close(pipa[1]);
 		dup2(pipa[0], box->cmds->infile);
 		close(pipa[0]);
@@ -103,7 +130,8 @@ void	ft_print_list(t_prg *box)
 	{
 		while (tmp->full_cmd[i] != 0)
 		{
-			printf("%s\n", tmp->full_cmd[i]);
+			printf("%s, infile = %d\n", tmp->full_cmd[i], tmp->infile);
+
 			if (tmp->infile == 1025)
 				printf("delimitatore %s\n", tmp->delimiter);
 			i++;
@@ -120,14 +148,15 @@ void	ft_print_env_b()
 	// char	**res;
 
 	// res = __environ;
-	int	i;
+	printf("qua ci sarebbe env ma su mac non funge\n"); //COMMENTATO PER MAC
+	// int	i;
 
-	i = 0;
-	while (__environ[i] != 0)
-	{
-		printf("%s\n", __environ[i]);
-		i++;
-	}
+	// i = 0;
+	// while (__environ[i] != 0)
+	// {
+	// 	printf("%s\n", __environ[i]);
+	// 	i++;
+	// }
 }
 
 //UNSET VARIABILI
@@ -200,7 +229,7 @@ void	ft_signal_ctrl_c(int sig)
 {
 	(void)sig;
 	printf("\n");
-	rl_replace_line("", 0);
+	//rl_replace_line("", 0); //COMMENTATO PER MAC
 	rl_on_new_line();
 	rl_redisplay();
 }
@@ -264,7 +293,7 @@ static char	**ft_main_part_2(char *shell_prompt)
 		ft_unset_var(res);
 		return (NULL);
 	}
-	cmd_args = ft_split(res, ' ');
+	cmd_args = ft_altro_split(res);
 	cmd_args = variable_expander(cmd_args);
 	cmd_args = parse_pipe_min_mag(cmd_args);
 	return (cmd_args);
@@ -294,7 +323,7 @@ int	main(int argc, char **argv, char **envp)
 			ft_clean_list(box.cmds);
 			box.cmds = NULL;
 			ft_add_element(&box.cmds, cmd_args);
-			//ft_print_list(&box);
+			ft_print_list(&box);
 			ft_main_part_3(cmd_args, box, envp);
 		}
 		// else

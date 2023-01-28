@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   list_utils.c                                       :+:      :+:    :+:   */
+/*   check_for_minus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aboncine <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ltombell <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 12:07:52 by aboncine          #+#    #+#             */
-/*   Updated: 2023/01/25 13:06:39 by aboncine         ###   ########.fr       */
+/*   Updated: 2023/01/28 15:50:38 by ltombell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,9 @@ static char	**ft_remove_from_arr(char **full_cmd, int i)
 
 static void	ft_check_for_minus_3(t_cmd *elem, int i)
 {
-	if (elem->full_cmd[i - 1])
+	if (elem->full_cmd[i + 1])
 	{
-		elem->infile = open(elem->full_cmd[i - 1], O_RDONLY);
+		elem->infile = open(elem->full_cmd[i + 1], O_RDONLY);
 		if (elem->infile < 0)
 			printf("unable to open file\n");
 	}
@@ -49,7 +49,7 @@ static void	ft_check_for_minus_2(t_cmd *elem, int i)
 {
 	elem->infile = 1025;
 	elem->delimiter = ft_strdup(elem->full_cmd[i + 1]);
-	elem->full_cmd = ft_remove_from_arr(elem->full_cmd, i +1);
+	elem->full_cmd = ft_remove_from_arr(elem->full_cmd, i + 1);
 }
 
 void	ft_check_for_minus(t_cmd *elem)
