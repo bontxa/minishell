@@ -2,6 +2,44 @@
 
 int	exitStatus;
 
+void	ft_print_export_b(char *s)
+{
+	int	i;
+	int	countVirgo;
+
+	i = 0;
+	countVirgo = 0;
+	while (s[i])
+	{
+		if (i > 0 && s[i - 1] == '=' && countVirgo == 0)
+		{
+			printf("\"");
+			countVirgo++;
+		}
+		// if (s[i + 1] == '\0')
+		// {
+		// 	printf("\"");
+		// }
+		printf("%c", s[i]);
+		i++;
+	}
+	printf("\"");
+}
+
+void ft_print_export()
+{
+	int	i;
+
+	i = 0;
+	while (__environ[i] != 0)
+	{
+		printf("declare -x ");
+		ft_print_export_b(__environ[i]);
+		printf("\n");
+		i++;
+	}
+}
+
 // void	ft_print_env(char **envp)
 // {
 // 	int	i;
@@ -59,10 +97,29 @@ int	ft_is_there_an_equal(char *s)
 void	ft_export_var(char *prompt)
 {
 	char **res;
-	res = ft_split(prompt, ' ');
-	res = ft_split(res[1], '=');
-	printf("valore = %s\n", res[1]);
-	printf("setenv = %d\n", setenv(res[0], res[1], 1));
+	res = ft_altro_split(prompt);
+	if (res[1] == 0)
+	{
+		ft_print_export();
+		return ;
+	}
+	if (res[1][0] == '=' && res[1][1] == '\0')
+	{
+		write(2, "Error: not a valid identifier\n", 31);
+		return;
+	}
+	res = ft_simple_split(res[1], '=');
+	if (ft_is_valid_var_name(res[0]) == 1)
+	{
+		if (res[1] != 0)
+			setenv(res[0], ft_strtrim(res[1], "\""), 1);
+		else
+			return;
+	}
+	else
+	{
+		write(2, "Error: not a valid identifier\n", 31);
+	}
 }
 
 void	ft_clean_list(t_cmd *comandi)
@@ -148,15 +205,15 @@ void	ft_print_env_b()
 	// char	**res;
 
 	// res = __environ;
-	printf("qua ci sarebbe env ma su mac non funge\n"); //COMMENTATO PER MAC
-	// int	i;
+	// printf("qua ci sarebbe env ma su mac non funge\n"); //COMMENTATO PER MAC
+	int	i;
 
-	// i = 0;
-	// while (__environ[i] != 0)
-	// {
-	// 	printf("%s\n", __environ[i]);
-	// 	i++;
-	// }
+	i = 0;
+	while (__environ[i] != 0)
+	{
+		printf("%s\n", __environ[i]);
+		i++;
+	}
 }
 
 //UNSET VARIABILI
@@ -166,7 +223,7 @@ void	ft_unset_var(char *str)
 	char	**arr;
 
 	arr = ft_split(str, ' ');
-	printf("unset %s\n", arr[1]);
+	// printf("unset %s\n", arr[1]);
 	unsetenv(arr[1]);
 }
 
@@ -229,7 +286,7 @@ void	ft_signal_ctrl_c(int sig)
 {
 	(void)sig;
 	printf("\n");
-	//rl_replace_line("", 0); //COMMENTATO PER MAC
+	rl_replace_line("", 0); //COMMENTATO PER MAC
 	rl_on_new_line();
 	rl_redisplay();
 }
@@ -245,15 +302,35 @@ void	ft_signal_ctrl_bs(int sig)
 static void	ft_main_part_3(char **cmd_args, t_prg box, char **envp)
 {
 	int		pid;
+	char	*tmp;
 
 	if (!cmd_args[0])
 		rl_redisplay();
 	else if (ft_strncmp(cmd_args[0], "exit", 4) == 0)
-		exit(0);
+	{
+		if (cmd_args[1] != 0 && cmd_args[2] == 0)
+		{
+			tmp = ft_strtrim(cmd_args[1], "\"");
+			exitStatus = atoi(tmp);
+		}
+		exit(exitStatus);
+	}
 	else if (ft_strncmp(cmd_args[0], "cd", 2) == 0)
 	{
-		if(chdir(cmd_args[1]) == -1)
-			printf("cd: no such file or directory: %s\n", cmd_args[1]);
+		if (cmd_args[2] == 0)
+		{
+			if(chdir(cmd_args[1]) == -1)
+			{
+				printf("cd: no such file or directory: %s\n", cmd_args[1]);
+				exitStatus = 1;
+			}
+			exitStatus = 0;
+		}
+		else
+		{
+			write(2, " too many arguments\n", 19);
+			exitStatus = 1;
+		}
 	}
 	else
 	{
@@ -263,7 +340,7 @@ static void	ft_main_part_3(char **cmd_args, t_prg box, char **envp)
 		else
 		{
 			waitpid(pid, &exitStatus, 0);
-			printf("exit status: %d\n", exitStatus);
+			//printf("exit status: %d\n", exitStatus);
 		}
 	}
 }
@@ -282,12 +359,12 @@ static char	**ft_main_part_2(char *shell_prompt)
 		exit (0);
 	}
 	add_history(res);
-	if (!ft_strncmp(res, "export", 6))
-	{
-		printf("trattasi di export\n");
-		ft_export_var(res);
-		return (NULL);
-	}
+	// if (!ft_strncmp(res, "export", 6))
+	// {
+	// 	//printf("trattasi di export\n");
+	// 	ft_export_var(res);
+	// 	return (NULL);
+	// }
 	if (!ft_strncmp(res, "unset", 5))
 	{
 		ft_unset_var(res);
@@ -309,7 +386,7 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
-	ft_print_header();
+	//ft_print_header();
 	exitStatus = 0;
 	box.cmds = NULL;
 	shell_prompt = ft_strdup("@sovietshell: \033[0;37m");
@@ -323,7 +400,7 @@ int	main(int argc, char **argv, char **envp)
 			ft_clean_list(box.cmds);
 			box.cmds = NULL;
 			ft_add_element(&box.cmds, cmd_args);
-			ft_print_list(&box);
+			//ft_print_list(&box);
 			ft_main_part_3(cmd_args, box, envp);
 		}
 		// else
@@ -358,6 +435,6 @@ int	main(int argc, char **argv, char **envp)
 			}
 		} */
 	}
-	return (0);
+	exit (exitStatus);
 }
 

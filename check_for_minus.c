@@ -6,7 +6,7 @@
 /*   By: ltombell <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 12:07:52 by aboncine          #+#    #+#             */
-/*   Updated: 2023/01/28 15:50:38 by ltombell         ###   ########.fr       */
+/*   Updated: 2023/01/30 16:46:35 by ltombell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,22 @@ static void	ft_check_for_minus_3(t_cmd *elem, int i)
 		printf("errore nell'infile, parametro scorretto");
 		exit(-1);
 	}
-	elem->full_cmd = ft_remove_from_arr(elem->full_cmd, i);
+	// printf("i + 1 = %s,	i - 1 = %s\n", elem->full_cmd[i + 1], elem->full_cmd[i - 1]);
+	elem->full_cmd = ft_remove_string_from_arr(elem->full_cmd, elem->full_cmd[i]);
+	//int x = 0;
+	// while (elem->full_cmd[x] != 0)
+	// {
+	// 	printf("da fullcmd %s\n", elem->full_cmd[x]);
+	// 	x++;
+	// }
+	elem->full_cmd = ft_remove_string_from_arr(elem->full_cmd, elem->full_cmd[i]);
+	// x = 0;
+	// while (elem->full_cmd[x] != 0)
+	// {
+	// 	printf("da fullcmd %s\n", elem->full_cmd[x]);
+	// 	x++;
+	// }
+
 }
 
 static void	ft_check_for_minus_2(t_cmd *elem, int i)

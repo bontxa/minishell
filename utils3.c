@@ -6,7 +6,7 @@
 /*   By: ltombell <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 12:22:47 by aboncine          #+#    #+#             */
-/*   Updated: 2023/01/28 12:24:58 by ltombell         ###   ########.fr       */
+/*   Updated: 2023/01/30 13:30:59 by ltombell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,4 +124,32 @@ char	*ft_strtrim(char const *s1, char const *set)
 	}
 	newstr[i] = '\0';
 	return (newstr);
+}
+
+int	ft_isalnum(int c)
+{
+	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')
+		|| (c >= '0' && c <= '9'))
+		return (8);
+	return (0);
+}
+
+int	ft_is_valid_var_name(char *s)
+{
+	int	i;
+
+	i = 0;
+	if ((s[i] >= 'a' && s[i] <= 'z') || (s[i] >= 'A' && s[i] <= 'Z'))
+		i++;
+	else
+		return (0);
+	while (s[i])
+	{
+		if (ft_isalnum(s[i]) == 0)
+		{
+			return (0);
+		}
+		i++;
+	}
+	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: ltombell <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 12:45:27 by aboncine          #+#    #+#             */
-/*   Updated: 2023/01/28 12:55:42 by ltombell         ###   ########.fr       */
+/*   Updated: 2023/01/30 16:38:10 by ltombell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,5 +76,8 @@ char	**ft_remove_string_from_arr(char **arr, char *str);
 void	ft_print_env_b();
 char	**ft_altro_split(char *s);
 int		ft_is_var_inside_quotes(char *s);
+char	*ft_gestisci_virgo(char *str);
+int		ft_is_valid_var_name(char *s);
+void	ft_export_var(char *prompt);
 
 #endif

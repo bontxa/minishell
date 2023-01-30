@@ -52,7 +52,7 @@ char	**ft_remove_string_from_arr(char **arr, char *str)
 	i = 0;
 	b = 0;
 	res = malloc(sizeof(char *) * (ft_how_many_strings(arr) - 1));
-	str = ft_strjoin(str, "=");
+	//str = ft_strjoin(str, "=");
 	while (arr[i] != 0)
 	{
 		if (ft_strncmp(arr[i], str, ft_strlen(str)) != 0)

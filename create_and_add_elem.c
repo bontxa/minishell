@@ -6,7 +6,7 @@
 /*   By: ltombell <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 13:02:01 by aboncine          #+#    #+#             */
-/*   Updated: 2023/01/28 15:52:07 by ltombell         ###   ########.fr       */
+/*   Updated: 2023/01/30 11:14:51 by ltombell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static char	**ft_copy_to_list(char **prompt, int start)
 	while (prompt[start] != 0 && prompt[start][0] != '|'
 		&& prompt[start][0] != '>')
 	{
-		res[b] = ft_strdup(prompt[start]);
+		res[b] = ft_strdup(ft_gestisci_virgo(prompt[start]));
 		start++;
 		b++;
 	}

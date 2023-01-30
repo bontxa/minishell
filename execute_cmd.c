@@ -6,7 +6,7 @@
 /*   By: ltombell <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 12:12:33 by aboncine          #+#    #+#             */
-/*   Updated: 2023/01/28 14:31:03 by ltombell         ###   ########.fr       */
+/*   Updated: 2023/01/30 14:27:16 by ltombell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,12 @@ void	execute_cmd(char **cmd_args, char **envp)
 	{
 		ft_print_env_b();
 		exit(0);
+	}
+	else if (!ft_strncmp(cmd_args[0], "export", 6))
+	{
+		//printf("trattasi di export\n");
+		ft_export_var(cmd_args[0]);
+		exit (exitStatus);
 	}
 	else if (ft_strncmp(cmd_args[0], "echo", 4) == 0)
 		execute_cmd_2(cmd_args);
