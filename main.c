@@ -2,6 +2,17 @@
 
 int	exitStatus;
 
+// int		ft_is_just_export(char *s)
+// {
+// 	int	i;
+
+// 	i = 0;
+// 	while (s[i])
+// 	{
+// 		if (s[i] != ' ' || s[i] != '|' || s[i] != '>' || s[i] != )
+// 	}
+// }
+
 void	ft_print_export_b(char *s)
 {
 	int	i;
@@ -97,18 +108,12 @@ int	ft_is_there_an_equal(char *s)
 void	ft_export_var(char *prompt)
 {
 	char **res;
-	res = ft_altro_split(prompt);
-	if (res[1] == 0)
-	{
-		ft_print_export();
-		return ;
-	}
-	if (res[1][0] == '=' && res[1][1] == '\0')
+	if (prompt[0] == '=' && prompt[1] == '\0')
 	{
 		write(2, "Error: not a valid identifier\n", 31);
 		return;
 	}
-	res = ft_simple_split(res[1], '=');
+	res = ft_simple_split(prompt, '=');
 	if (ft_is_valid_var_name(res[0]) == 1)
 	{
 		if (res[1] != 0)
@@ -117,9 +122,7 @@ void	ft_export_var(char *prompt)
 			return;
 	}
 	else
-	{
 		write(2, "Error: not a valid identifier\n", 31);
-	}
 }
 
 void	ft_clean_list(t_cmd *comandi)
@@ -310,9 +313,10 @@ static void	ft_main_part_3(char **cmd_args, t_prg box, char **envp)
 	{
 		if (cmd_args[1] != 0 && cmd_args[2] == 0)
 		{
-			tmp = ft_strtrim(cmd_args[1], "\"");
+			tmp = ft_strtrim(cmd_args[1], "\"'");
 			exitStatus = atoi(tmp);
 		}
+		printf("%d\n", exitStatus);
 		exit(exitStatus);
 	}
 	else if (ft_strncmp(cmd_args[0], "cd", 2) == 0)
@@ -359,18 +363,26 @@ static char	**ft_main_part_2(char *shell_prompt)
 		exit (0);
 	}
 	add_history(res);
-	// if (!ft_strncmp(res, "export", 6))
-	// {
-	// 	//printf("trattasi di export\n");
-	// 	ft_export_var(res);
-	// 	return (NULL);
-	// }
 	if (!ft_strncmp(res, "unset", 5))
 	{
 		ft_unset_var(res);
 		return (NULL);
 	}
 	cmd_args = ft_altro_split(res);
+	if (ft_strncmp(cmd_args[0], "export", 7) == 0)
+	{
+		if (cmd_args[1] && cmd_args[1][0] != '|' && cmd_args[1][0] != '>' && cmd_args[1][0] != '<')
+		{
+			ft_export_var(cmd_args[1]);
+			return (NULL);
+		}
+	}
+	// if (!ft_strncmp(res, "export", 6))
+	// {
+	// 	//printf("trattasi di export\n");
+	// 	ft_export_var(res);
+	// 	return (NULL);
+	// }
 	cmd_args = variable_expander(cmd_args);
 	cmd_args = parse_pipe_min_mag(cmd_args);
 	return (cmd_args);
@@ -400,40 +412,10 @@ int	main(int argc, char **argv, char **envp)
 			ft_clean_list(box.cmds);
 			box.cmds = NULL;
 			ft_add_element(&box.cmds, cmd_args);
+			// printf("\n-----------\n");
 			//ft_print_list(&box);
 			ft_main_part_3(cmd_args, box, envp);
 		}
-		// else
-		// {
-		// 	envenv = __environ;
-		// 	int p = 0;
-		// 	printf("inizio stampa envp da envp\n\n");
-		// 	while (envenv[p] != 0)
-		// 	{
-		// 		printf("%s\n", envenv[p]);
-		// 		p++;
-		// 	}
-		// }
-		/* if (!cmd_args[0])
-			rl_redisplay();
-		else if (ft_strncmp(cmd_args[0], "exit", 4) == 0)
-			exit(0);
-		else if (ft_strncmp(cmd_args[0], "cd", 2) == 0)
-		{
-			if(chdir(cmd_args[1]) == -1)
-				printf("cd: no such file or directory: %s\n", cmd_args[1]);
-		}
-		else
-		{
-			pid = fork();
-			if (pid == 0)
-				ft_the_executer(&box, envp);
-			else
-			{
-				waitpid(pid, &exitStatus, 0);
-				printf("exit status: %d\n", exitStatus);
-			}
-		} */
 	}
 	exit (exitStatus);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   special_chars.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aboncine <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ltombell <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 12:05:11 by aboncine          #+#    #+#             */
-/*   Updated: 2023/01/24 13:19:54 by aboncine         ###   ########.fr       */
+/*   Updated: 2023/01/31 12:40:06 by ltombell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ int	is_there_a_special_char(char *s)
 	int	i;
 
 	i = 0;
+	if (s[0] == 34 || s[0] == 39)
+		return (0);
 	while (s[i])
 	{
 		if (s[i] == ' ')

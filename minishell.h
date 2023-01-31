@@ -6,7 +6,7 @@
 /*   By: ltombell <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 12:45:27 by aboncine          #+#    #+#             */
-/*   Updated: 2023/01/30 16:38:10 by ltombell         ###   ########.fr       */
+/*   Updated: 2023/01/31 13:16:49 by ltombell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ void	ft_simple_echo(char **to_print, int n);
 char	*ft_create_sc_word(char *s, int start, int i);
 int		how_many_strings(char **prompt);
 int		how_many_strings_with_s_c(char *s);
-int		is_there_a_special_char(char *s);
 int		how_many_special_chars(char *s);
 char	*create_str3(char const *s, int *i, int *flag, char *c);
 void	here_doc_handler(char *delim);
@@ -79,5 +78,7 @@ int		ft_is_var_inside_quotes(char *s);
 char	*ft_gestisci_virgo(char *str);
 int		ft_is_valid_var_name(char *s);
 void	ft_export_var(char *prompt);
+void	ft_print_export();
+
 
 #endif
