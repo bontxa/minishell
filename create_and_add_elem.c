@@ -6,7 +6,7 @@
 /*   By: ltombell <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 13:02:01 by aboncine          #+#    #+#             */
-/*   Updated: 2023/01/30 11:14:51 by ltombell         ###   ########.fr       */
+/*   Updated: 2023/01/31 18:10:17 by ltombell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ static t_cmd	*ft_create_elem(char **strarr, int start)
 	elem = (t_cmd *)malloc(sizeof(t_cmd));
 	elem->full_cmd = ft_copy_to_list(strarr, start);
 	elem->outfile = 1;
+	elem->infile = 0;
 	elem->next = NULL;
 	ft_check_for_minus(elem);
 	return (elem);

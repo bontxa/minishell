@@ -2,16 +2,80 @@
 
 int	exitStatus;
 
-// int		ft_is_just_export(char *s)
-// {
-// 	int	i;
+int		ft_is_good_exit_status(char *s)
+{
+	int	i;
 
-// 	i = 0;
-// 	while (s[i])
-// 	{
-// 		if (s[i] != ' ' || s[i] != '|' || s[i] != '>' || s[i] != )
-// 	}
-// }
+	i = 1;
+	if ((s[0] > '9' || s[0] < '0') && s[0] != '-' && s[0] != '+')
+		return (1);
+	while (s[i])
+	{
+		if (s[i] > '9' || s[i] < '0')
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+char	*ft_remove_virgo_exit_status(char *s)
+{
+	int		i;
+	int		count;
+	int		b;
+	char	*res;
+	int		flag;
+
+	i = 0;
+	b = 0;
+	count = 0;
+	flag = 0;
+	while (s[i])
+	{
+		if ((s[i] == 34 || s[i] == 39) && flag == 0)
+		{
+			if (s[i] == 34)
+				flag = 1;
+			if (s[i] == 39)
+				flag = 2;
+			i++;
+		}
+		else if (s[i] == 34 && flag == 1)
+			i++;
+		else if (s[i] == 39 && flag == 2)
+			i++;
+		else
+		{
+			count++;
+			i++;
+		}
+	}
+	res = malloc(sizeof(char) * count + 1);
+	i = 0;
+	while (s[i])
+	{
+		if ((s[i] == 34 || s[i] == 39) && flag == 0)
+		{
+			if (s[i] == 34)
+				flag = 1;
+			if (s[i] == 39)
+				flag = 2;
+			i++;
+		}
+		else if (s[i] == 34 && flag == 1)
+			i++;
+		else if (s[i] == 39 && flag == 2)
+			i++;
+		else
+		{
+			res[b] = s[i];
+			b++;
+			i++;
+		}
+	}
+	res[b] = '\0';
+	return (res);
+}
 
 void	ft_print_export_b(char *s)
 {
@@ -159,13 +223,15 @@ void	ft_execute_child(t_prg *box, char **envp)
 		waitpid(pid, &exitStatus, 0);
 		//printf("exit status = %d\n", exitStatus);
 		close(pipa[1]);
-		dup2(pipa[0], box->cmds->infile);
+		dup2(pipa[0], 0);
 		close(pipa[0]);
 	}
 }
 
 void	ft_the_executer(t_prg *box, char **envp)
 {
+	if (box->cmds->infile < 0)
+		exit(2);
 	if (box->cmds->infile == 1025)
 		here_doc_handler(box->cmds->delimiter);
 	else
@@ -313,10 +379,15 @@ static void	ft_main_part_3(char **cmd_args, t_prg box, char **envp)
 	{
 		if (cmd_args[1] != 0 && cmd_args[2] == 0)
 		{
-			tmp = ft_strtrim(cmd_args[1], "\"'");
-			exitStatus = atoi(tmp);
+			tmp = ft_remove_virgo_exit_status(cmd_args[1]);
+			if (ft_is_good_exit_status(tmp) == 0)
+				exitStatus = atoi(tmp);
+			else
+			{
+				write(2, "wrong exit status\n", 19);
+				exitStatus = 2;
+			}
 		}
-		printf("%d\n", exitStatus);
 		exit(exitStatus);
 	}
 	else if (ft_strncmp(cmd_args[0], "cd", 2) == 0)
@@ -368,7 +439,14 @@ static char	**ft_main_part_2(char *shell_prompt)
 		ft_unset_var(res);
 		return (NULL);
 	}
+	// printf("res = %s\n", res);
 	cmd_args = ft_altro_split(res);
+	//int f = 0;
+	// while (cmd_args[f] != 0)
+	// {
+	// 	printf("dopo parse %s\n", cmd_args[f]);
+	// 	f++;
+	// }
 	if (ft_strncmp(cmd_args[0], "export", 7) == 0)
 	{
 		if (cmd_args[1] && cmd_args[1][0] != '|' && cmd_args[1][0] != '>' && cmd_args[1][0] != '<')

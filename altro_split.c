@@ -72,7 +72,7 @@ char	*ft_crea_parola(char *s, int i)
 		}
 		i++;
 	}
-	res = malloc(sizeof(char) * (i - b + 1));
+	res = malloc(sizeof(char) * (i - b + 2));
 	while (b <= i)
 	{
 		res[c] = s[b];
@@ -101,6 +101,7 @@ char	**ft_altro_split(char *s)
 		if (s[i] != ' ' && ((s[i - 1] == ' ' && flagApici == 0 && flagVirgo == 0) || i == 0))
 		{
 			res[b] = ft_crea_parola(s, i);
+			//printf("resb = %s\n", res[b]);
 			b++;
 		}
 		if (s[i] == 34)
