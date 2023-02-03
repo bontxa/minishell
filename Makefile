@@ -6,7 +6,7 @@
 #    By: ltombell <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/24 12:45:42 by aboncine          #+#    #+#              #
-#    Updated: 2023/01/30 16:38:28 by ltombell         ###   ########.fr        #
+#    Updated: 2023/02/03 12:23:32 by ltombell         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ SRCS = main.c execute_cmd.c variable_parser.c utils.c utils2.c utils3.c \
 	gestione_virgo.c arr_utils.c
 OBJS = $(SRCS:.c=.o)
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g
 
 %.o: %.c
 	$(CC) -c $(CFLAGS) $?

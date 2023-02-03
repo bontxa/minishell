@@ -51,7 +51,7 @@ char	**ft_remove_string_from_arr(char **arr, char *str)
 
 	i = 0;
 	b = 0;
-	res = malloc(sizeof(char *) * (ft_how_many_strings(arr) - 1));
+	res = malloc(sizeof(char *) * (ft_how_many_strings(arr)));
 	//str = ft_strjoin(str, "=");
 	while (arr[i] != 0)
 	{

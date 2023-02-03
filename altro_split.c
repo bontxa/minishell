@@ -13,7 +13,7 @@ int	ft_how_many_words(char *s)
 	count = 0;
 	while (s[i])
 	{
-		if (s[i] != ' ' && ((s[i - 1] == ' ' && flagApici == 0 && flagVirgo == 0) || i == 0))
+		if (s[i] != ' ' && (i == 0 || (s[i - 1] == ' ' && flagApici == 0 && flagVirgo == 0)))
 		{
 			count++;
 		}
@@ -98,7 +98,7 @@ char	**ft_altro_split(char *s)
 	res = malloc (sizeof(char *) * (ft_how_many_words(s) + 1));
 	while (s[i])
 	{
-		if (s[i] != ' ' && ((s[i - 1] == ' ' && flagApici == 0 && flagVirgo == 0) || i == 0))
+		if (s[i] != ' ' && (i == 0 || (s[i - 1] == ' ' && flagApici == 0 && flagVirgo == 0)))
 		{
 			res[b] = ft_crea_parola(s, i);
 			//printf("resb = %s\n", res[b]);
