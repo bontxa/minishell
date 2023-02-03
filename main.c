@@ -210,6 +210,8 @@ void	ft_clean_list(t_cmd *comandi)
 	while (tmp)
 	{
 		tmp_2 = tmp->next;
+		ft_free_strarr(tmp->full_cmd);
+		free(tmp->full_cmd);
 		free (tmp);
 		tmp = tmp_2;
 	}
@@ -400,6 +402,7 @@ static void	ft_main_part_3(char **cmd_args, t_prg box, char **envp)
 				exitStatus = 2;
 			}
 		}
+		ft_clean_list(box.cmds);
 		exit(exitStatus);
 	}
 	else if (ft_strncmp(cmd_args[0], "cd", 2) == 0)
@@ -491,7 +494,7 @@ int	main(int argc, char **argv, char **envp)
 	//ft_print_header();
 	exitStatus = 0;
 	box.cmds = NULL;
-	shell_prompt = ft_strdup("@sovietshell: \033[0;37m");
+	shell_prompt = "@sovietshell: \033[0;37m";
 	tmp = ft_strjoin("\033[1;31m", getenv("LOGNAME"));
 	shell_prompt = ft_strjoin(tmp, shell_prompt);
 	while (1)
