@@ -6,7 +6,7 @@
 /*   By: ltombell <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 12:34:42 by aboncine          #+#    #+#             */
-/*   Updated: 2023/01/28 15:43:06 by ltombell         ###   ########.fr       */
+/*   Updated: 2023/02/03 13:31:40 by ltombell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,5 +104,7 @@ char	**parse_pipe_min_mag(char **prompt)
 		i++;
 	}
 	res[b] = 0;
+	ft_free_strarr(prompt);
+	free(prompt);
 	return (res);
 }

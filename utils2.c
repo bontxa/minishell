@@ -6,7 +6,7 @@
 /*   By: ltombell <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 12:16:27 by aboncine          #+#    #+#             */
-/*   Updated: 2023/01/30 12:10:54 by ltombell         ###   ########.fr       */
+/*   Updated: 2023/02/03 13:20:57 by ltombell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static int	is_there_a_dollar(char *s)
 	return (0);
 }
 
-char	**variable_expander(char **prompt)
+void	variable_expander(char **prompt)
 {
 	int	i;
 
@@ -42,7 +42,6 @@ char	**variable_expander(char **prompt)
 		else
 			i++;
 	}
-	return (prompt);
 }
 
 static int	countwords(char const *s, char c)

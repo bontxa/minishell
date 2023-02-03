@@ -6,7 +6,7 @@
 /*   By: ltombell <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 12:45:27 by aboncine          #+#    #+#             */
-/*   Updated: 2023/02/03 12:48:05 by ltombell         ###   ########.fr       */
+/*   Updated: 2023/02/03 13:25:19 by ltombell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,11 +47,11 @@ extern int exitStatus;
 char	**ft_split(char const *s, char c);
 char	**get_paths(char **envp);
 void	execute_cmd(char **cmd_args, char **envp);
-char	*ft_strtrim(char const *s1, char const *set);
+char	*ft_strtrim(char *s1, char *set);
 char	*ft_strjoin(char const *s1, char const *s2);
 size_t	ft_strlen(const char *s);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
-char	**variable_expander(char **prompt);
+void	variable_expander(char **prompt);
 char	*ft_strdup(const char *s);
 char	**ft_simple_split(char const *s, char c);
 char	*extract_var(char *s);

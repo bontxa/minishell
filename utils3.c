@@ -6,7 +6,7 @@
 /*   By: ltombell <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 12:22:47 by aboncine          #+#    #+#             */
-/*   Updated: 2023/01/30 13:30:59 by ltombell         ###   ########.fr       */
+/*   Updated: 2023/02/03 12:57:24 by ltombell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ static size_t	count_c_e(char const *s1, char const *set)
 	return (res);
 }
 
-char	*ft_strtrim(char const *s1, char const *set)
+char	*ft_strtrim(char *s1, char *set)
 {
 	char		*newstr;
 	size_t		i;
@@ -123,6 +123,7 @@ char	*ft_strtrim(char const *s1, char const *set)
 		first++;
 	}
 	newstr[i] = '\0';
+	//free(s1); MEGLIO DI NO! UN SACCO DI DOUBLE FREE
 	return (newstr);
 }
 

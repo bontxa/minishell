@@ -6,48 +6,12 @@
 /*   By: ltombell <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 11:50:51 by aboncine          #+#    #+#             */
-/*   Updated: 2023/01/30 12:08:22 by ltombell         ###   ########.fr       */
+/*   Updated: 2023/02/03 13:20:37 by ltombell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-/*
-//CONTROLLA SE C'E` UN $
 
-int		is_there_a_dollar(char *s)
-{
-	int	i;
-
-	i = 0;
-	while (s[i])
-	{
-		if (s[i] == '$')
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
-
-char	**variable_expander(char **prompt)
-{
-	int		i;
-
-	i = 0;
-	while (prompt[i] != 0)
-	{
-		while (is_there_a_dollar(prompt[i]) == 1)
-		{
-			// "$PWD 'hola'"
-			// "'hola' $PWD"
-			// "$PWD/hola"
-			prompt[i] = extract_var(prompt[i]);
-		}
-
-		i++;
-	}
-	return (prompt);
-} */
 
 static char	*extract_var_4(char *s, char *res, int *i, char	*prima)
 {

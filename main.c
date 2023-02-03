@@ -403,6 +403,7 @@ static void	ft_main_part_3(char **cmd_args, t_prg box, char **envp)
 			}
 		}
 		ft_clean_list(box.cmds);
+		ft_free_strarr(cmd_args);
 		exit(exitStatus);
 	}
 	else if (ft_strncmp(cmd_args[0], "cd", 2) == 0)
@@ -476,7 +477,7 @@ static char	**ft_main_part_2(char *shell_prompt)
 	// 	ft_export_var(res);
 	// 	return (NULL);
 	// }
-	cmd_args = variable_expander(cmd_args);
+	variable_expander(cmd_args);
 	cmd_args = parse_pipe_min_mag(cmd_args);
 	return (cmd_args);
 }
@@ -510,6 +511,7 @@ int	main(int argc, char **argv, char **envp)
 			ft_main_part_3(cmd_args, box, envp);
 		}
 	}
+	//ft_free_strarr(cmd_args);
 	exit (exitStatus);
 }
 

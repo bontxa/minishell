@@ -55,12 +55,13 @@ char *ft_gestisci_virgo(char *str)
 	int		oldlength;
 	int		count;
 	char	*res;
+	char	*tmp;
 
 	i = 0;
 	count = 0;
-	res = ft_remove_empty_virgo(str);
-	oldlength = ft_strlen(res);
-	res = ft_strtrim(res, "\"");
+	tmp = ft_remove_empty_virgo(str);
+	oldlength = ft_strlen(tmp);
+	res = ft_strtrim(tmp, "\"");
 	if ((int)ft_strlen(res) != oldlength)
 	{
 		while (res[i])
