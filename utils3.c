@@ -6,7 +6,7 @@
 /*   By: ltombell <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 12:22:47 by aboncine          #+#    #+#             */
-/*   Updated: 2023/02/03 12:57:24 by ltombell         ###   ########.fr       */
+/*   Updated: 2023/02/03 15:03:22 by ltombell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,11 +108,18 @@ char	*ft_strtrim(char *s1, char *set)
 	i = 0;
 	first = count_c_s(s1, set);
 	last = count_c_e(s1, set);
+	// printf("stringa da trimmare [%s]", s1);
+	// printf("ecco first e last %zu, %zu\n", first, last);
 	if (s1[first] == '\0')
 	{
 		first = 0;
 		last = 0;
 	}
+	// if (last - first == ft_strlen(s1))
+	// {
+	// 	printf("entro\n");
+	// 	return (s1);
+	// }
 	newstr = (char *) malloc(sizeof(char) * (last - first + 1));
 	if (!newstr)
 		return (NULL);
@@ -123,7 +130,7 @@ char	*ft_strtrim(char *s1, char *set)
 		first++;
 	}
 	newstr[i] = '\0';
-	//free(s1); MEGLIO DI NO! UN SACCO DI DOUBLE FREE
+	// free(s1); MEGLIO DI NO! UN SACCO DI DOUBLE FREE
 	return (newstr);
 }
 

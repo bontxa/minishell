@@ -6,7 +6,7 @@
 /*   By: ltombell <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 12:45:27 by aboncine          #+#    #+#             */
-/*   Updated: 2023/02/03 13:25:19 by ltombell         ###   ########.fr       */
+/*   Updated: 2023/02/03 15:10:38 by ltombell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ int		ft_is_valid_var_name(char *s);
 void	ft_export_var(char *prompt);
 void	ft_print_export();
 void    ft_free_strarr(char **strarr);
+int		is_there_virgos(char *str);
 
 
 

@@ -2,6 +2,20 @@
 
 int	exitStatus;
 
+int		is_there_virgos(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == 34 || str[i] == 39)
+			return(1);
+		i++;
+	}
+	return (0);
+}
+
 void    ft_free_strarr(char **strarr)
 {
     int i;
@@ -211,6 +225,11 @@ void	ft_clean_list(t_cmd *comandi)
 	{
 		tmp_2 = tmp->next;
 		ft_free_strarr(tmp->full_cmd);
+		//SERVIRANNO O NO?
+		if (tmp->infile != 0)
+			close(tmp->infile);
+		if (tmp->outfile != 1)
+			close(tmp->outfile);
 		free(tmp->full_cmd);
 		free (tmp);
 		tmp = tmp_2;
