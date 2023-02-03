@@ -6,7 +6,7 @@
 /*   By: ltombell <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 12:34:42 by aboncine          #+#    #+#             */
-/*   Updated: 2023/02/03 13:31:40 by ltombell         ###   ########.fr       */
+/*   Updated: 2023/02/03 13:40:25 by ltombell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,12 +81,14 @@ static void	parse_pipe_min_mag_2(char *prompt_str, char **res, int *b)
 			*b = *b + 1;
 			c++;
 		}
+		free(tmp);
 	}
 	else
 	{
 		res[*b] = ft_strdup(prompt_str);
 		*b = *b + 1;
 	}
+
 }
 
 char	**parse_pipe_min_mag(char **prompt)

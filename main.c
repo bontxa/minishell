@@ -404,6 +404,7 @@ static void	ft_main_part_3(char **cmd_args, t_prg box, char **envp)
 		}
 		ft_clean_list(box.cmds);
 		ft_free_strarr(cmd_args);
+		free(cmd_args);
 		exit(exitStatus);
 	}
 	else if (ft_strncmp(cmd_args[0], "cd", 2) == 0)
@@ -425,6 +426,8 @@ static void	ft_main_part_3(char **cmd_args, t_prg box, char **envp)
 	}
 	else
 	{
+		ft_free_strarr(cmd_args);
+		free(cmd_args);
 		pid = fork();
 		if (pid == 0)
 			ft_the_executer(&box, envp);
