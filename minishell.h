@@ -6,7 +6,7 @@
 /*   By: ltombell <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 12:45:27 by aboncine          #+#    #+#             */
-/*   Updated: 2023/01/31 13:16:49 by ltombell         ###   ########.fr       */
+/*   Updated: 2023/02/03 12:48:05 by ltombell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,8 @@ char	*ft_gestisci_virgo(char *str);
 int		ft_is_valid_var_name(char *s);
 void	ft_export_var(char *prompt);
 void	ft_print_export();
+void    ft_free_strarr(char **strarr);
+
 
 
 #endif

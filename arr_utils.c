@@ -63,6 +63,13 @@ char	**ft_remove_string_from_arr(char **arr, char *str)
 		i++;
 	}
 	res[b] = 0;
+	b = 0;
+	while (arr[b] != 0)
+	{
+		free(arr[b]);
+		b++;
+	}
+	free(arr);
 	return(res);
 }
 

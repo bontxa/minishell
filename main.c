@@ -2,6 +2,18 @@
 
 int	exitStatus;
 
+void    ft_free_strarr(char **strarr)
+{
+    int i;
+    i = 0;
+    while(strarr[i])
+    {
+        free(strarr[i]);
+        i++;
+    }
+    //free(strarr);
+}
+
 int		ft_is_good_exit_status(char *s)
 {
 	int	i;
