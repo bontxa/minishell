@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aboncine <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ltombell <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 10:28:17 by aboncine          #+#    #+#             */
-/*   Updated: 2023/01/25 12:47:27 by aboncine         ###   ########.fr       */
+/*   Updated: 2023/02/03 12:35:51 by ltombell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ void	create_str(char const *s, char **splitted, char c)
 
 	i = 0;
 	num = 0;
+	quote = '\0';
 	while (s[i] == c && s[i])
 		i++;
 	while (s[i])
@@ -67,6 +68,7 @@ int	count_words2(char const *s, int *i, int count, char c)
 {
 	char	quote;
 
+	quote = '\0';
 	while (s[*i])
 	{
 		if (s[*i] == 34 || s[*i] == 39)
