@@ -19,6 +19,13 @@ char *ft_remove_first_char_from_str(char *str, char c, int count)
 		i++;
 	}
 	res[b] = 0;
+	if (ft_strlen(res) == ft_strlen(str) - 1)
+	{
+		// printf("entro\n");
+		// printf("str = %s\n", str);
+		// printf("res = %s\n", res);
+		free(str);
+	}
 	return (res);
 }
 
@@ -77,7 +84,10 @@ char *ft_gestisci_virgo(char *str)
 	}
 	else
 	{
-		res = ft_strtrim(res, "'");
+		if (res[0] == '\'' || res[ft_strlen(res) - 1] == '\'')
+		{
+			res = ft_strtrim(res, "'");
+		}
 		while (res[i])
 		{
 			if (res[i] == 39)

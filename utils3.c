@@ -6,7 +6,7 @@
 /*   By: ltombell <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 12:22:47 by aboncine          #+#    #+#             */
-/*   Updated: 2023/02/06 17:19:54 by ltombell         ###   ########.fr       */
+/*   Updated: 2023/02/06 17:48:36 by ltombell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,10 +139,10 @@ char	*ft_strtrim(char *s1, char *set)
 		first++;
 	}
 	newstr[i] = '\0';
-	if (ft_strlen(newstr) > ft_strlen(s1))
-	{
-		free(s1);
-	}
+	// if (ft_strlen(newstr) > ft_strlen(s1))
+	// {
+	// 	free(s1);
+	// }
 	// free(s1); MEGLIO DI NO! UN SACCO DI DOUBLE FREE
 	return (newstr);
 }
