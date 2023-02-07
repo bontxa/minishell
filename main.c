@@ -398,9 +398,12 @@ void	ft_simple_echo(char **to_print, int n)
 	{
 		while (to_print[n] != 0)
 		{
-			printf("%s", to_print[n]);
+			if (ft_strncmp(to_print[n], "-n", 2) != 0)
+			{
+				printf("%s", to_print[n]);
 			if (to_print[n + 1] != 0)
-				printf(" ");
+			printf(" ");
+			}
 			n++;
 		}
 	}
