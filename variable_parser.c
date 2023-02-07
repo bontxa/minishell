@@ -6,7 +6,7 @@
 /*   By: ltombell <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 11:50:51 by aboncine          #+#    #+#             */
-/*   Updated: 2023/02/07 10:24:31 by ltombell         ###   ########.fr       */
+/*   Updated: 2023/02/07 10:32:50 by ltombell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ static char	*extract_var_4(char *s, char *res, int *i, char	*prima)
 {
 	char	*dopo;
 	char	*tmp;
+	char	*tmp2;
 
 	dopo = ft_strncpy(s, *i, ft_strlen(s));
 	if (res[0] == '\0')
@@ -35,7 +36,13 @@ static char	*extract_var_4(char *s, char *res, int *i, char	*prima)
 	res = ft_strjoin(prima, tmp);
 	free(prima);
 	if (dopo[0] != '\0')
-		res = ft_strjoin(res, dopo);
+	{
+		tmp2 = ft_strjoin(res, dopo);
+		free (s);
+		free(res);
+		free(dopo);
+		return (tmp2);
+	}
 	free(s);
 	free(dopo);
 	return (res);
