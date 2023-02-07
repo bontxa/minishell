@@ -43,7 +43,7 @@ char	**ft_add_string_to_arr(char **arr, char *s)
 	return (res);
 }
 
-char	**ft_remove_string_from_arr(char **arr, char *str)
+char	**ft_remove_string_from_arr(char **arr, int toremove)
 {
 	int		i;
 	int		b;
@@ -55,7 +55,7 @@ char	**ft_remove_string_from_arr(char **arr, char *str)
 	//str = ft_strjoin(str, "=");
 	while (arr[i] != 0)
 	{
-		if (ft_strncmp(arr[i], str, ft_strlen(str)) != 0)
+		if (i != toremove)
 		{
 			res[b] = ft_strdup(arr[i]);
 			b++;

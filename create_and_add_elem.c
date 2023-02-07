@@ -6,7 +6,7 @@
 /*   By: ltombell <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 13:02:01 by aboncine          #+#    #+#             */
-/*   Updated: 2023/02/03 15:11:40 by ltombell         ###   ########.fr       */
+/*   Updated: 2023/02/07 16:48:52 by ltombell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,12 @@ static t_cmd	*ft_create_elem(char **strarr, int start)
 	elem->outfile = 1;
 	elem->infile = 0;
 	elem->next = NULL;
+	// int x = 0;
+	// while (strarr[x] != 0)
+	// {
+	// 	printf("%s\n", strarr[x]);
+	// 	x++;
+	// }
 	ft_check_for_minus(elem);
 	return (elem);
 }

@@ -271,7 +271,7 @@ void	ft_execute_child(t_prg *box, char **envp)
 	}
 	else
 	{
-		waitpid(pid, &exitStatus, 0);
+		waitpid(pid, &exitStatus, WNOHANG);
 		//printf("exit status = %d\n", exitStatus);
 		close(pipa[1]);
 		dup2(pipa[0], 0);
@@ -499,11 +499,11 @@ static void	ft_main_part_3(char **cmd_args, t_prg box, char **envp)
 			ft_the_executer(&box, envp);
 		else
 		{
-			if (exitStatus == 2)
+			if (exitStatus == 1)
 				flagExit = 1;
 			waitpid(pid, &exitStatus, 0);
 			if (flagExit == 1)
-				exitStatus = 2;
+				exitStatus = 1;
 		}
 	}
 }
@@ -543,6 +543,11 @@ static char	**ft_main_part_2(char *shell_prompt)
 	// }
 	if (ft_strncmp(cmd_args[0], "export", 7) == 0)
 	{
+		if (cmd_args[2] != 0 && cmd_args[1][0] != '|' && cmd_args[1][0] != '>' && cmd_args[1][0] != '<')
+		{
+			exitStatus = 1;
+			return (NULL);
+		}
 		if (cmd_args[1] && cmd_args[1][0] != '|' && cmd_args[1][0] != '>' && cmd_args[1][0] != '<')
 		{
 			ft_export_var(cmd_args[1]);

@@ -6,7 +6,7 @@
 /*   By: ltombell <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 12:07:52 by aboncine          #+#    #+#             */
-/*   Updated: 2023/02/07 15:21:25 by ltombell         ###   ########.fr       */
+/*   Updated: 2023/02/07 16:49:21 by ltombell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,28 +40,27 @@ static void	ft_check_for_minus_3(t_cmd *elem, int i)
 	// }
 	if (elem->full_cmd[i + 1])
 	{
-		// printf("provo ad aprire %s\n", elem->full_cmd[i + 1]);
 		elem->infile = open(elem->full_cmd[i + 1], O_RDONLY);
 		if (elem->infile < 0)
 		{
 			write(2, "unable to open file\n", 21);
-			exitStatus = 2;
+			exitStatus = 1;
 		}
 	}
 	else
 	{
-		printf("errore nell'infile, parametro scorretto");
-		exit(-1);
+		printf("errore nell'infile, parametro scorretto\n");
+		return ;
 	}
 	// printf("i + 1 = %s,	i - 1 = %s\n", elem->full_cmd[i + 1], elem->full_cmd[i - 1]);
-	elem->full_cmd = ft_remove_string_from_arr(elem->full_cmd, elem->full_cmd[i]);
+	elem->full_cmd = ft_remove_string_from_arr(elem->full_cmd, i);
 	//int x = 0;
 	// while (elem->full_cmd[x] != 0)
 	// {
 	// 	printf("da fullcmd %s\n", elem->full_cmd[x]);
 	// 	x++;
 	// }
-	elem->full_cmd = ft_remove_string_from_arr(elem->full_cmd, elem->full_cmd[i]);
+	elem->full_cmd = ft_remove_string_from_arr(elem->full_cmd, i);
 	// int x = 0;
 	// while (elem->full_cmd[x] != 0)
 	// {
@@ -84,19 +83,16 @@ void	ft_check_for_minus(t_cmd *elem)
 	i = 0;
 	while (elem->full_cmd[i] != 0)
 	{
+		//printf("sto controllando %s, i = %d\n", elem->full_cmd[i], i);
 		if (elem->full_cmd[i][0] == '<')
 		{
+			//printf("trovato!\n");
 			if (elem->full_cmd[i][1] && elem->full_cmd[i][1] == '<')
 				ft_check_for_minus_2(elem, i);
 			else
 			{
 				ft_check_for_minus_3(elem, i);
-				// 	int f = 0;
-				// while (elem->full_cmd[f] != 0)
-				// {
-				// 	printf("da check %s\n", elem->full_cmd[f]);
-				// 		f++;
-				// }
+				i = 0;
 			}
 		}
 		if (elem->full_cmd[i] == NULL)
