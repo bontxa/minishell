@@ -6,7 +6,7 @@
 /*   By: ltombell <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 11:50:51 by aboncine          #+#    #+#             */
-/*   Updated: 2023/02/06 18:01:33 by ltombell         ###   ########.fr       */
+/*   Updated: 2023/02/07 10:24:31 by ltombell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,10 @@ static char	*extract_var_4(char *s, char *res, int *i, char	*prima)
 	return (res);
 }
 
-static char	*extract_var_3(char *s, char *res, int *i, int *b)
+static char	*extract_var_3(char *s, int *i, int *b)
 {
 	int	x;
+	char	*res;
 
 	x = 0;
 	while ((s[*i] >= 'a' && s[*i] <= 'z') || (s[*i] >= 'A' && s[*i] <= 'Z')
@@ -60,8 +61,10 @@ static char	*extract_var_3(char *s, char *res, int *i, int *b)
 	return (res);
 }
 
-static char	*extract_var_2(char *s, char *res, int *i, int *b)
+static char	*extract_var_2(char *s, int *i, int *b)
 {
+	char	*res;
+
 	res = malloc(2);
 	res[0] = s[*b];
 	res[1] = '\0';
@@ -76,6 +79,7 @@ char	*extract_var(char *s)
 	int		b;
 	char	*res;
 	char	*prima;
+	char	*tmp;
 
 	i = 0;
 	res = NULL;
@@ -93,8 +97,10 @@ char	*extract_var(char *s)
 		return (extract_var_4(s, res, &i, prima));
 	}
 	if (s[b] >= '0' && s[b] <= '9')
-		res = extract_var_2(s, res, &i, &b);
+		res = extract_var_2(s, &i, &b);
 	else
-		res = extract_var_3(s, res, &i, &b);
-	return (extract_var_4(s, res, &i, prima));
+		res = extract_var_3(s, &i, &b);
+	tmp = extract_var_4(s, res, &i, prima);
+	free(res);
+	return (tmp);
 }
