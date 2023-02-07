@@ -197,7 +197,9 @@ int	ft_is_there_an_equal(char *s)
 
 void	ft_export_var(char *prompt)
 {
-	char **res;
+	char	**res;
+	char	*tmp;
+
 	if (prompt[0] == '=' && prompt[1] == '\0')
 	{
 		write(2, "Error: not a valid identifier\n", 31);
@@ -207,12 +209,26 @@ void	ft_export_var(char *prompt)
 	if (ft_is_valid_var_name(res[0]) == 1)
 	{
 		if (res[1] != 0)
-			setenv(res[0], ft_strtrim(res[1], "\""), 1);
+		{
+			tmp = ft_strtrim(res[1], "\"");
+			setenv(res[0], tmp, 1);
+			free (tmp);
+		}
 		else
+		{
+			ft_free_strarr(res);
+			free(res);
 			return;
+		}
 	}
 	else
+	{
+		ft_free_strarr(res);
+		free(res);
 		write(2, "Error: not a valid identifier\n", 31);
+	}
+	ft_free_strarr(res);
+	free(res);
 }
 
 void	ft_clean_list(t_cmd *comandi)
@@ -490,6 +506,8 @@ static char	**ft_main_part_2(char *shell_prompt)
 		if (cmd_args[1] && cmd_args[1][0] != '|' && cmd_args[1][0] != '>' && cmd_args[1][0] != '<')
 		{
 			ft_export_var(cmd_args[1]);
+			ft_free_strarr(cmd_args);
+			free(cmd_args);
 			return (NULL);
 		}
 	}

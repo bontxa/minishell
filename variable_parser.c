@@ -6,7 +6,7 @@
 /*   By: ltombell <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 11:50:51 by aboncine          #+#    #+#             */
-/*   Updated: 2023/02/07 10:32:50 by ltombell         ###   ########.fr       */
+/*   Updated: 2023/02/07 11:17:42 by ltombell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,14 @@ static char	*extract_var_4(char *s, char *res, int *i, char	*prima)
 	char	*dopo;
 	char	*tmp;
 	char	*tmp2;
+	int		flag;
 
+	flag = 0;
 	dopo = ft_strncpy(s, *i, ft_strlen(s));
 	if (res[0] == '\0')
 	{
 		tmp = ft_itoa(exitStatus);
+		flag = 1;
 	}
 	else
 	{
@@ -35,6 +38,8 @@ static char	*extract_var_4(char *s, char *res, int *i, char	*prima)
 	}
 	res = ft_strjoin(prima, tmp);
 	free(prima);
+	if (flag == 1)
+		free(tmp);
 	if (dopo[0] != '\0')
 	{
 		tmp2 = ft_strjoin(res, dopo);
@@ -101,7 +106,9 @@ char	*extract_var(char *s)
 		i++;
 		res = malloc(2);
 		res[0] = '\0';
-		return (extract_var_4(s, res, &i, prima));
+		tmp = extract_var_4(s, res, &i, prima);
+		free(res);
+		return (tmp);
 	}
 	if (s[b] >= '0' && s[b] <= '9')
 		res = extract_var_2(s, &i, &b);
