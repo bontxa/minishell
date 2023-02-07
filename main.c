@@ -202,6 +202,7 @@ void	ft_export_var(char *prompt)
 
 	if (prompt[0] == '=' && prompt[1] == '\0')
 	{
+		exitStatus = 1;
 		write(2, "Error: not a valid identifier\n", 31);
 		return;
 	}
@@ -226,7 +227,7 @@ void	ft_export_var(char *prompt)
 		// ft_free_strarr(res);
 		// free(res);
 		exitStatus = 1;
-		write(2, " not a valid identifier\n", 31);
+		write(2, " not a valid identifier\n", 25);
 	}
 	ft_free_strarr(res);
 	free(res);
@@ -340,10 +341,18 @@ void	ft_print_env_b()
 void	ft_unset_var(char *str)
 {
 	char	**arr;
+	int		i;
 
+	i = 1;
 	arr = ft_split(str, ' ');
 	// printf("unset %s\n", arr[1]);
-	unsetenv(arr[1]);
+	while (arr[i] != 0)
+	{
+		unsetenv(arr[i]);
+		i++;
+	}
+	ft_free_strarr(arr);
+	free(arr);
 }
 
 
@@ -404,8 +413,9 @@ void	ft_simple_echo(char **to_print, int n)
 void	ft_signal_ctrl_c(int sig)
 {
 	(void)sig;
-	printf("\n");
-	rl_replace_line("", 0); //COMMENTATO PER MAC
+	if (sig != 0)
+		printf("\n");
+	rl_replace_line("", 0);
 	rl_on_new_line();
 	rl_redisplay();
 }
@@ -449,16 +459,19 @@ static void	ft_main_part_3(char **cmd_args, t_prg box, char **envp)
 		{
 			if(chdir(cmd_args[1]) == -1)
 			{
-				printf("cd: no such file or directory: %s\n", cmd_args[1]);
+				write(2, "no such file or directory\n", 27);
 				exitStatus = 1;
 			}
-			exitStatus = 0;
+			else
+				exitStatus = 0;
 		}
 		else
 		{
-			write(2, " too many arguments\n", 19);
+			write(2, " too many arguments\n", 20);
 			exitStatus = 1;
 		}
+		ft_free_strarr(cmd_args);
+		free(cmd_args);
 	}
 	else
 	{
@@ -483,6 +496,11 @@ static char	**ft_main_part_2(char *shell_prompt)
 	signal(SIGINT, ft_signal_ctrl_c);
 	signal(SIGQUIT, ft_signal_ctrl_bs);
 	res = readline(shell_prompt);
+	if (res[0] == '\0')
+	{
+		ft_signal_ctrl_c(0);
+		return (NULL);
+	}
 	if (res == NULL)
 	{
 		printf("signal\n");
@@ -496,6 +514,7 @@ static char	**ft_main_part_2(char *shell_prompt)
 	}
 	// printf("res = %s\n", res);
 	cmd_args = ft_altro_split(res);
+	free(res);
 	//int f = 0;
 	// while (cmd_args[f] != 0)
 	// {
@@ -533,7 +552,7 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
-	//ft_print_header();
+	ft_print_header();
 	exitStatus = 0;
 	box.cmds = NULL;
 	shell_prompt = "@sovietshell: \033[0;37m";
