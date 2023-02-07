@@ -244,9 +244,9 @@ void	ft_clean_list(t_cmd *comandi)
 		tmp_2 = tmp->next;
 		ft_free_strarr(tmp->full_cmd);
 		//SERVIRANNO O NO?
-		if (tmp->infile != 0)
+		if (tmp->infile > 0)
 			close(tmp->infile);
-		if (tmp->outfile != 1)
+		if (tmp->outfile > 1)
 			close(tmp->outfile);
 		free(tmp->full_cmd);
 		free (tmp);
@@ -432,12 +432,21 @@ static void	ft_main_part_3(char **cmd_args, t_prg box, char **envp)
 {
 	int		pid;
 	char	*tmp;
+	int		flagExit;
 
+	flagExit = 0;
 	if (!cmd_args[0])
 		rl_redisplay();
 	else if (ft_strncmp(cmd_args[0], "exit", 4) == 0)
 	{
-		if (cmd_args[1] != 0 && cmd_args[2] == 0)
+		if (cmd_args[1] == 0)
+		{
+			ft_clean_list(box.cmds);
+			ft_free_strarr(cmd_args);
+			free(cmd_args);
+			exit(exitStatus);
+		}
+		else if (cmd_args[1] != 0 && cmd_args[2] == 0)
 		{
 			tmp = ft_remove_virgo_exit_status(cmd_args[1]);
 			if (ft_is_good_exit_status(tmp) == 0)
@@ -447,11 +456,19 @@ static void	ft_main_part_3(char **cmd_args, t_prg box, char **envp)
 				write(2, "wrong exit status\n", 19);
 				exitStatus = 2;
 			}
+			ft_clean_list(box.cmds);
+			ft_free_strarr(cmd_args);
+			free(cmd_args);
+			exit(exitStatus);
 		}
-		ft_clean_list(box.cmds);
-		ft_free_strarr(cmd_args);
-		free(cmd_args);
-		exit(exitStatus);
+		else if (cmd_args[2] != 0)
+		{
+			write (2, "exit: too many arguments\n", 26);
+			exitStatus = 1;
+			// ft_clean_list(box.cmds);
+			ft_free_strarr(cmd_args);
+			free(cmd_args);
+		}
 	}
 	else if (ft_strncmp(cmd_args[0], "cd", 2) == 0)
 	{
@@ -482,8 +499,11 @@ static void	ft_main_part_3(char **cmd_args, t_prg box, char **envp)
 			ft_the_executer(&box, envp);
 		else
 		{
+			if (exitStatus == 2)
+				flagExit = 1;
 			waitpid(pid, &exitStatus, 0);
-			//printf("exit status: %d\n", exitStatus);
+			if (flagExit == 1)
+				exitStatus = 2;
 		}
 	}
 }
@@ -552,7 +572,7 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
-	ft_print_header();
+	//ft_print_header();
 	exitStatus = 0;
 	box.cmds = NULL;
 	shell_prompt = "@sovietshell: \033[0;37m";

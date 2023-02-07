@@ -6,7 +6,7 @@
 /*   By: ltombell <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 12:07:52 by aboncine          #+#    #+#             */
-/*   Updated: 2023/01/31 18:19:22 by ltombell         ###   ########.fr       */
+/*   Updated: 2023/02/07 15:21:25 by ltombell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,10 @@ static void	ft_check_for_minus_3(t_cmd *elem, int i)
 		// printf("provo ad aprire %s\n", elem->full_cmd[i + 1]);
 		elem->infile = open(elem->full_cmd[i + 1], O_RDONLY);
 		if (elem->infile < 0)
+		{
 			write(2, "unable to open file\n", 21);
+			exitStatus = 2;
+		}
 	}
 	else
 	{
