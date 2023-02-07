@@ -223,9 +223,10 @@ void	ft_export_var(char *prompt)
 	}
 	else
 	{
-		ft_free_strarr(res);
-		free(res);
-		write(2, "Error: not a valid identifier\n", 31);
+		// ft_free_strarr(res);
+		// free(res);
+		exitStatus = 1;
+		write(2, " not a valid identifier\n", 31);
 	}
 	ft_free_strarr(res);
 	free(res);
