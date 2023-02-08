@@ -212,7 +212,8 @@ void	ft_export_var(char *prompt)
 		if (res[1] != 0)
 		{
 			tmp = ft_strtrim(res[1], "\"");
-			setenv(res[0], tmp, 1);
+			if (ft_strlen(res[1]) > ft_strlen(tmp) || (tmp[0] >= '0' && tmp[0] <= '9'))
+				setenv(res[0], tmp, 1);
 			free (tmp);
 		}
 		else
@@ -390,17 +391,20 @@ void	ft_print_header()
 void	ft_simple_echo(char **to_print, int n)
 {
 	int	tmp;
+	int	flag;
 
 	tmp = n;
+	flag = 0;
 	if (!to_print && n == 1)
 		return;
 	else
 	{
 		while (to_print[n] != 0)
 		{
-			if (ft_strncmp(to_print[n], "-n", 2) != 0)
+			if (ft_strncmp(to_print[n], "-n", 2) != 0 || flag == 1)
 			{
 				printf("%s", to_print[n]);
+				flag = 1;
 			if (to_print[n + 1] != 0)
 			printf(" ");
 			}
@@ -522,17 +526,19 @@ static char	**ft_main_part_2(char *shell_prompt)
 	if (res[0] == '\0')
 	{
 		ft_signal_ctrl_c(0);
+		free(res);
 		return (NULL);
 	}
 	if (res == NULL)
 	{
-		printf("signal\n");
+		free(res);
 		exit (0);
 	}
 	add_history(res);
 	if (!ft_strncmp(res, "unset", 5))
 	{
 		ft_unset_var(res);
+		free(res);
 		return (NULL);
 	}
 	// printf("res = %s\n", res);

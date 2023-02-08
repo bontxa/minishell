@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   variable_parser.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ltombell <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aboncine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 11:50:51 by aboncine          #+#    #+#             */
-/*   Updated: 2023/02/07 11:17:42 by ltombell         ###   ########.fr       */
+/*   Updated: 2023/02/08 13:17:45 by aboncine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ static char	*extract_var_4(char *s, char *res, int *i, char	*prima)
 		{
 			tmp = malloc(1);
 			tmp[0] = '\0';
+			flag = 1;
 		}
 	}
 	res = ft_strjoin(prima, tmp);
