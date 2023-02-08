@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_and_add_elem.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ltombell <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aboncine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 13:02:01 by aboncine          #+#    #+#             */
-/*   Updated: 2023/02/07 16:48:52 by ltombell         ###   ########.fr       */
+/*   Updated: 2023/02/08 18:38:54 by aboncine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static char	**ft_copy_to_list(char **prompt, int start)
 	while (prompt[start] != 0 && prompt[start][0] != '|'
 		&& prompt[start][0] != '>')
 	{
-		if (is_there_virgos(prompt[start]) == 1)
+		if (ft_is_there_virgos(prompt[start]) == 1)
 			res[b] = ft_gestisci_virgo(prompt[start]);
 		else
 			res[b] = ft_strdup(prompt[start]);
@@ -45,12 +45,6 @@ static t_cmd	*ft_create_elem(char **strarr, int start)
 	elem->outfile = 1;
 	elem->infile = 0;
 	elem->next = NULL;
-	// int x = 0;
-	// while (strarr[x] != 0)
-	// {
-	// 	printf("%s\n", strarr[x]);
-	// 	x++;
-	// }
 	ft_check_for_minus(elem);
 	return (elem);
 }
