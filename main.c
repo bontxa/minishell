@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	free_n_exit(char *res)
+void	free_n_exit(char *res)  ////// gia' spostata
 {
 	free(res);
 	exit (0);
@@ -22,7 +22,7 @@ int		is_there_virgos(char *str)
 	return (0);
 }
 
-void    ft_free_strarr(char **strarr)
+void    ft_free_strarr(char **strarr)////////////SPOSTATA
 {
     int i;
     i = 0;
@@ -109,7 +109,7 @@ char	*ft_remove_virgo_exit_status(char *s)
 	return (res);
 }
 
-void	ft_print_export_b(char *s)
+void	ft_print_export_b(char *s)///////////////////////SPOSTATA
 {
 	int	i;
 	int	countVirgo;
@@ -133,7 +133,7 @@ void	ft_print_export_b(char *s)
 	printf("\"");
 }
 
-void ft_print_export()
+void ft_print_export()/////////////////////SPOSTATA
 {
 	int	i;
 
@@ -201,10 +201,27 @@ int	ft_is_there_an_equal(char *s)
 	return (0);
 }
 
+
+static void	ft_export_not_valid_var(void)
+{
+	exitStatus = 1;
+	write(2, " not a valid identifier\n", 25);
+}
+
+
+static void	ft_export_valid_var(char **res)
+{
+	char	*tmp;
+
+	tmp = ft_strtrim(res[1], "\"");
+	if (ft_strlen(res[1]) > ft_strlen(tmp) || (tmp[0] >= '0' && tmp[0] <= '9'))
+		setenv(res[0], tmp, 1);
+	free (tmp);
+}
+
 void	ft_export_var(char *prompt)
 {
 	char	**res;
-	char	*tmp;
 
 	if (prompt[0] == '=' && prompt[1] == '\0')
 	{
@@ -216,12 +233,7 @@ void	ft_export_var(char *prompt)
 	if (ft_is_valid_var_name(res[0]) == 1)
 	{
 		if (res[1] != 0)
-		{
-			tmp = ft_strtrim(res[1], "\"");
-			if (ft_strlen(res[1]) > ft_strlen(tmp) || (tmp[0] >= '0' && tmp[0] <= '9'))
-				setenv(res[0], tmp, 1);
-			free (tmp);
-		}
+			ft_export_valid_var(res);
 		else
 		{
 			ft_free_strarr(res);
@@ -230,12 +242,7 @@ void	ft_export_var(char *prompt)
 		}
 	}
 	else
-	{
-		// ft_free_strarr(res);
-		// free(res);
-		exitStatus = 1;
-		write(2, " not a valid identifier\n", 25);
-	}
+		ft_export_not_valid_var();
 	ft_free_strarr(res);
 	free(res);
 }
@@ -250,7 +257,6 @@ void	ft_clean_list(t_cmd *comandi)
 	{
 		tmp_2 = tmp->next;
 		ft_free_strarr(tmp->full_cmd);
-		//SERVIRANNO O NO?
 		if (tmp->infile > 0)
 			close(tmp->infile);
 		if (tmp->outfile > 1)
@@ -260,6 +266,10 @@ void	ft_clean_list(t_cmd *comandi)
 		tmp = tmp_2;
 	}
 }
+
+/////////////////////DA COPIARE
+
+
 
 void	ft_execute_child(t_prg *box, char **envp)
 {
@@ -279,7 +289,6 @@ void	ft_execute_child(t_prg *box, char **envp)
 	else
 	{
 		waitpid(pid, &exitStatus, WNOHANG);
-		//printf("exit status = %d\n", exitStatus);
 		close(pipa[1]);
 		dup2(pipa[0], 0);
 		close(pipa[0]);
@@ -302,6 +311,20 @@ void	ft_the_executer(t_prg *box, char **envp)
 	dup2(box->cmds->outfile, 1);
 	execute_cmd(box->cmds->full_cmd, envp);
 }
+
+
+
+
+
+/////SIAMO ARRIVATI QUI
+
+
+
+
+
+
+
+
 
 void	ft_print_list(t_prg *box)
 {
@@ -449,6 +472,26 @@ static void	ft_free_clean_exit(t_cmd *cmds, char **cmd_args)
 	exit(exitStatus);
 }
 
+static void	ft_others(char **cmd_args, t_prg box, char **envp)
+{
+	int	pid;
+	int	flagexit;
+
+	flagexit = 0;
+	ft_free_strarr(cmd_args);
+	free(cmd_args);
+	pid = fork();
+	if (pid == 0)
+		ft_the_executer(&box, envp);
+	else
+	{
+		if (exitStatus == 1)
+			flagexit = 1;
+		waitpid(pid, &exitStatus, 0);
+		if (flagexit == 1)
+			exitStatus = 1;
+	}
+}
 
 static void	ft_cd(char **cmd_args)
 {
@@ -501,11 +544,6 @@ static void	ft_exit(char **cmd_args, t_prg box)
 
 static void	ft_main_part_3(char **cmd_args, t_prg box, char **envp)
 {
-	int		pid;
-	//char	*tmp;
-	int		flagExit;
-
-	flagExit = 0;
 	if (!cmd_args[0])
 		rl_redisplay();
 	else if (ft_strncmp(cmd_args[0], "exit", 4) == 0)
@@ -513,21 +551,7 @@ static void	ft_main_part_3(char **cmd_args, t_prg box, char **envp)
 	else if (ft_strncmp(cmd_args[0], "cd", 2) == 0)
 		ft_cd(cmd_args);
 	else
-	{
-		ft_free_strarr(cmd_args);
-		free(cmd_args);
-		pid = fork();
-		if (pid == 0)
-			ft_the_executer(&box, envp);
-		else
-		{
-			if (exitStatus == 1)
-				flagExit = 1;
-			waitpid(pid, &exitStatus, 0);
-			if (flagExit == 1)
-				exitStatus = 1;
-		}
-	}
+		ft_others(cmd_args, box, envp);
 }
 
 static char	**ft_main_part_2_bis(char **cmd_args)
@@ -580,21 +604,12 @@ static char	**ft_main_part_2(char *shell_prompt)
 	return (cmd_args);
 }
 
-int	main(int argc, char **argv, char **envp)
+static void	ft_do_everything(char *shell_prompt, char **envp)
 {
 	char	**cmd_args;
-	char	*shell_prompt;
-	char	*tmp;
 	t_prg	box;
 
-	(void)argc;
-	(void)argv;
-	//ft_print_header();
-	exitStatus = 0;
 	box.cmds = NULL;
-	shell_prompt = "@sovietshell: \033[0;37m";
-	tmp = ft_strjoin("\033[1;31m", getenv("LOGNAME"));
-	shell_prompt = ft_strjoin(tmp, shell_prompt);
 	while (1)
 	{
 		signal(SIGINT, ft_signal_ctrl_c);
@@ -608,6 +623,20 @@ int	main(int argc, char **argv, char **envp)
 			ft_main_part_3(cmd_args, box, envp);
 		}
 	}
+}
+
+int	main(int argc, char **argv, char **envp)
+{
+	char	*shell_prompt;
+	char	*tmp;
+
+	(void)argc;
+	(void)argv;
+	exitStatus = 0;
+	shell_prompt = "@sovietshell: \033[0;37m";
+	tmp = ft_strjoin("\033[1;31m", getenv("LOGNAME"));
+	shell_prompt = ft_strjoin(tmp, shell_prompt);
+	ft_do_everything(shell_prompt, envp);
 	exit (exitStatus);
 }
 
