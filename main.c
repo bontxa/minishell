@@ -1,5 +1,11 @@
 #include "minishell.h"
 
+void	free_n_exit(char *res)
+{
+	free(res);
+	exit (0);
+}
+
 int	exitStatus;
 
 int		is_there_virgos(char *str)
@@ -435,68 +441,77 @@ void	ft_signal_ctrl_bs(int sig)
 
 //MAIN
 
+static void	ft_free_clean_exit(t_cmd *cmds, char **cmd_args)
+{
+	ft_clean_list(cmds);
+	ft_free_strarr(cmd_args);
+	free(cmd_args);
+	exit(exitStatus);
+}
+
+
+static void	ft_cd(char **cmd_args)
+{
+	if (cmd_args[2] == 0)
+	{
+		if(chdir(cmd_args[1]) == -1)
+		{
+			write(2, "no such file or directory\n", 27);
+			exitStatus = 1;
+		}
+		else
+			exitStatus = 0;
+	}
+	else
+	{
+		write(2, " too many arguments\n", 20);
+		exitStatus = 1;
+	}
+	ft_free_strarr(cmd_args);
+	free(cmd_args);
+}
+
+
+static void	ft_exit(char **cmd_args, t_prg box)
+{
+	char	*tmp;
+
+	if (cmd_args[1] == 0)
+		ft_free_clean_exit(box.cmds, cmd_args);
+	else if (cmd_args[1] != 0 && cmd_args[2] == 0)
+	{
+		tmp = ft_remove_virgo_exit_status(cmd_args[1]);
+		if (ft_is_good_exit_status(tmp) == 0)
+			exitStatus = atoi(tmp);
+		else
+		{
+			write(2, "wrong exit status\n", 19);
+			exitStatus = 2;
+		}
+		ft_free_clean_exit(box.cmds, cmd_args);
+	}
+	else if (cmd_args[2] != 0)
+	{
+		write (2, "exit: too many arguments\n", 26);
+		exitStatus = 1;
+		ft_free_strarr(cmd_args);
+		free(cmd_args);
+	}
+}
+
 static void	ft_main_part_3(char **cmd_args, t_prg box, char **envp)
 {
 	int		pid;
-	char	*tmp;
+	//char	*tmp;
 	int		flagExit;
 
 	flagExit = 0;
 	if (!cmd_args[0])
 		rl_redisplay();
 	else if (ft_strncmp(cmd_args[0], "exit", 4) == 0)
-	{
-		if (cmd_args[1] == 0)
-		{
-			ft_clean_list(box.cmds);
-			ft_free_strarr(cmd_args);
-			free(cmd_args);
-			exit(exitStatus);
-		}
-		else if (cmd_args[1] != 0 && cmd_args[2] == 0)
-		{
-			tmp = ft_remove_virgo_exit_status(cmd_args[1]);
-			if (ft_is_good_exit_status(tmp) == 0)
-				exitStatus = atoi(tmp);
-			else
-			{
-				write(2, "wrong exit status\n", 19);
-				exitStatus = 2;
-			}
-			ft_clean_list(box.cmds);
-			ft_free_strarr(cmd_args);
-			free(cmd_args);
-			exit(exitStatus);
-		}
-		else if (cmd_args[2] != 0)
-		{
-			write (2, "exit: too many arguments\n", 26);
-			exitStatus = 1;
-			// ft_clean_list(box.cmds);
-			ft_free_strarr(cmd_args);
-			free(cmd_args);
-		}
-	}
+		ft_exit(cmd_args, box);
 	else if (ft_strncmp(cmd_args[0], "cd", 2) == 0)
-	{
-		if (cmd_args[2] == 0)
-		{
-			if(chdir(cmd_args[1]) == -1)
-			{
-				write(2, "no such file or directory\n", 27);
-				exitStatus = 1;
-			}
-			else
-				exitStatus = 0;
-		}
-		else
-		{
-			write(2, " too many arguments\n", 20);
-			exitStatus = 1;
-		}
-		ft_free_strarr(cmd_args);
-		free(cmd_args);
-	}
+		ft_cd(cmd_args);
 	else
 	{
 		ft_free_strarr(cmd_args);
@@ -515,41 +530,8 @@ static void	ft_main_part_3(char **cmd_args, t_prg box, char **envp)
 	}
 }
 
-static char	**ft_main_part_2(char *shell_prompt)
+static char	**ft_main_part_2_bis(char **cmd_args)
 {
-	char	*res;
-	char **cmd_args;
-
-	signal(SIGINT, ft_signal_ctrl_c);
-	signal(SIGQUIT, ft_signal_ctrl_bs);
-	res = readline(shell_prompt);
-	if (res[0] == '\0')
-	{
-		ft_signal_ctrl_c(0);
-		free(res);
-		return (NULL);
-	}
-	if (res == NULL)
-	{
-		free(res);
-		exit (0);
-	}
-	add_history(res);
-	if (!ft_strncmp(res, "unset", 5))
-	{
-		ft_unset_var(res);
-		free(res);
-		return (NULL);
-	}
-	// printf("res = %s\n", res);
-	cmd_args = ft_altro_split(res);
-	free(res);
-	//int f = 0;
-	// while (cmd_args[f] != 0)
-	// {
-	// 	printf("dopo parse %s\n", cmd_args[f]);
-	// 	f++;
-	// }
 	if (ft_strncmp(cmd_args[0], "export", 7) == 0)
 	{
 		if (cmd_args[2] != 0 && cmd_args[1][0] != '|' && cmd_args[1][0] != '>' && cmd_args[1][0] != '<')
@@ -565,21 +547,42 @@ static char	**ft_main_part_2(char *shell_prompt)
 			return (NULL);
 		}
 	}
-	// if (!ft_strncmp(res, "export", 6))
-	// {
-	// 	//printf("trattasi di export\n");
-	// 	ft_export_var(res);
-	// 	return (NULL);
-	// }
 	variable_expander(cmd_args);
 	cmd_args = parse_pipe_min_mag(cmd_args);
+	return (cmd_args);
+}
+
+
+static char	**ft_main_part_2(char *shell_prompt)
+{
+	char	*res;
+	char **cmd_args;
+
+	res = readline(shell_prompt);
+	if (res == NULL)
+		free_n_exit(res);
+	if (res[0] == '\0')
+	{
+			ft_signal_ctrl_c(0);
+			free(res);
+			return (NULL);
+	}
+	add_history(res);
+	if (!ft_strncmp(res, "unset", 5))
+	{
+		ft_unset_var(res);
+		free(res);
+		return (NULL);
+	}
+	cmd_args = ft_altro_split(res);
+	free(res);
+	cmd_args = ft_main_part_2_bis(cmd_args);
 	return (cmd_args);
 }
 
 int	main(int argc, char **argv, char **envp)
 {
 	char	**cmd_args;
-	//int		pid;
 	char	*shell_prompt;
 	char	*tmp;
 	t_prg	box;
@@ -594,18 +597,17 @@ int	main(int argc, char **argv, char **envp)
 	shell_prompt = ft_strjoin(tmp, shell_prompt);
 	while (1)
 	{
+		signal(SIGINT, ft_signal_ctrl_c);
+		signal(SIGQUIT, ft_signal_ctrl_bs);
 		cmd_args = ft_main_part_2(shell_prompt);
 		if (cmd_args != NULL)
 		{
 			ft_clean_list(box.cmds);
 			box.cmds = NULL;
 			ft_add_element(&box.cmds, cmd_args);
-			// printf("\n-----------\n");
-			//ft_print_list(&box);
 			ft_main_part_3(cmd_args, box, envp);
 		}
 	}
-	//ft_free_strarr(cmd_args);
 	exit (exitStatus);
 }
 
