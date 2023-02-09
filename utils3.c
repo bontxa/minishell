@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils3.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ltombell <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aboncine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 12:22:47 by aboncine          #+#    #+#             */
-/*   Updated: 2023/02/06 17:48:36 by ltombell         ###   ########.fr       */
+/*   Updated: 2023/02/09 11:51:02 by aboncine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,9 @@ char	*create_str3(char const *s, int *i, int *flag, char *c)
 {
 	int		start;
 	int		size;
-	// int		j;
 
 	start = *i;
 	size = 0;
-	// j = 0;
 	while (s[start] != *c && s[start])
 	{
 		if (s[start] == 34 || s[start] == 39)
@@ -117,60 +115,10 @@ char	*ft_strtrim(char *s1, char *set)
 	}
 	first = count_c_s(s1, set);
 	last = count_c_e(s1, set);
-	// printf("stringa da trimmare [%s]", s1);
-	// printf("ecco first e last %zu, %zu\n", first, last);
-	if (s1[first] == '\0')
-	{
-		first = 0;
-		last = 0;
-	}
-	// if (last - first == ft_strlen(s1))
-	// {
-	// 	printf("entro\n");
-	// 	return (s1);
-	// }
+	ft_check_if_trimmable(s1, &first, &last);
 	newstr = (char *) malloc(sizeof(char) * (last - first + 1));
-	if (!newstr)
-		return (NULL);
 	while (first < last)
-	{
-		newstr[i] = s1[first];
-		i++;
-		first++;
-	}
+		newstr[i++] = s1[first++];
 	newstr[i] = '\0';
-	// if (ft_strlen(newstr) > ft_strlen(s1))
-	// {
-	// 	free(s1);
-	// }
-	// free(s1); MEGLIO DI NO! UN SACCO DI DOUBLE FREE
 	return (newstr);
-}
-
-int	ft_isalnum(int c)
-{
-	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')
-		|| (c >= '0' && c <= '9'))
-		return (8);
-	return (0);
-}
-
-int	ft_is_valid_var_name(char *s)
-{
-	int	i;
-
-	i = 0;
-	if ((s[i] >= 'a' && s[i] <= 'z') || (s[i] >= 'A' && s[i] <= 'Z'))
-		i++;
-	else
-		return (0);
-	while (s[i])
-	{
-		if (ft_isalnum(s[i]) == 0)
-		{
-			return (0);
-		}
-		i++;
-	}
-	return (1);
 }

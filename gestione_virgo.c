@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   gestione_virgo.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aboncine <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/09 11:34:41 by aboncine          #+#    #+#             */
+/*   Updated: 2023/02/09 11:35:04 by aboncine         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-char *ft_remove_first_char_from_str(char *str, char c, int count)
+static char	*ft_remove_first_char_from_str(char *str, char c, int count)
 {
 	int		i;
 	char	*res;
@@ -20,22 +32,17 @@ char *ft_remove_first_char_from_str(char *str, char c, int count)
 	}
 	res[b] = 0;
 	if (ft_strlen(res) == ft_strlen(str) - 1)
-	{
-		// printf("entro\n");
-		// printf("str = %s\n", str);
-		// printf("res = %s\n", res);
 		free(str);
-	}
 	return (res);
 }
 
-char	*ft_remove_empty_virgo(char *str)
+static char	*ft_remove_empty_virgo(char *str)
 {
 	int		i;
-	i =		0;
 	char	*res;
 	char	c;
 
+	i = 0;
 	if (str[0] != 39 && str[0] != 34)
 	{
 		while (str[i])
@@ -55,49 +62,40 @@ char	*ft_remove_empty_virgo(char *str)
 	return (str);
 }
 
-
-char *ft_gestisci_virgo(char *str)
+static char	*ft_gestisci_virgo_2(char *res, char c)
 {
 	int		i;
-	int		oldlength;
 	int		count;
-	char	*res;
 
 	i = 0;
 	count = 0;
+	while (res[i])
+	{
+		if (res[i] == c)
+			count++;
+		i++;
+	}
+	if (count % 2 != 0)
+		res = ft_remove_first_char_from_str(res, c, count);
+	return (res);
+}
+
+char	*ft_gestisci_virgo(char *str)
+{
+	int		oldlength;
+	char	*res;
+
 	res = ft_remove_empty_virgo(str);
 	oldlength = ft_strlen(res);
 	if (res[0] == '"' || res[ft_strlen(res) - 1] == '"')
-	{
 		res = ft_strtrim(res, "\"");
-	}
 	if ((int)ft_strlen(res) != oldlength)
-	{
-		while (res[i])
-		{
-			if (res[i] == 34)
-				count++;
-			i++;
-		}
-		if (count % 2 != 0)
-			res = ft_remove_first_char_from_str(res, 34, count);
-	}
+		res = ft_gestisci_virgo_2(res, 34);
 	else
 	{
 		if (res[0] == '\'' || res[ft_strlen(res) - 1] == '\'')
-		{
 			res = ft_strtrim(res, "'");
-		}
-		while (res[i])
-		{
-			if (res[i] == 39)
-				count++;
-			i++;
-		}
-		if (count % 2 != 0)
-		{
-			res = ft_remove_first_char_from_str(res, 39, count);
-		}
+		res = ft_gestisci_virgo_2(res, 39);
 	}
 	return (res);
 }

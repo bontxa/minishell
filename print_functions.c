@@ -6,7 +6,7 @@
 /*   By: aboncine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 17:23:57 by aboncine          #+#    #+#             */
-/*   Updated: 2023/02/08 18:34:34 by aboncine         ###   ########.fr       */
+/*   Updated: 2023/02/09 12:56:30 by aboncine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static void	ft_print_export_b(char *s)
 	printf("\"");
 }
 
-void	ft_print_export()
+void	ft_print_export(void)
 {
 	int	i;
 

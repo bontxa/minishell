@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_and_split.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ltombell <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aboncine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 12:34:42 by aboncine          #+#    #+#             */
-/*   Updated: 2023/02/03 13:40:25 by ltombell         ###   ########.fr       */
+/*   Updated: 2023/02/09 11:36:58 by aboncine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,9 @@ char	**split_s_c(char *s)
 	char	**res;
 	int		i;
 	int		b;
-	//int		start;
 
 	i = 0;
 	b = 0;
-	//start = 0;
 	res = malloc(sizeof(char *) * (how_many_strings_with_s_c(s) + 1));
 	while (s[i])
 	{
@@ -88,7 +86,6 @@ static void	parse_pipe_min_mag_2(char *prompt_str, char **res, int *b)
 		res[*b] = ft_strdup(prompt_str);
 		*b = *b + 1;
 	}
-
 }
 
 char	**parse_pipe_min_mag(char **prompt)

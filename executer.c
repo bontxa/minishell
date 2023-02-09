@@ -6,13 +6,27 @@
 /*   By: aboncine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 18:14:22 by aboncine          #+#    #+#             */
-/*   Updated: 2023/02/08 18:22:58 by aboncine         ###   ########.fr       */
+/*   Updated: 2023/02/09 12:38:44 by aboncine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int		ft_is_there_virgos(char *str)
+int	ft_is_there_a_pipe(char *s)
+{
+	int	i;
+
+	i = 0;
+	while (s[i])
+	{
+		if (s[i] == '|')
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+int	ft_is_there_virgos(char *str)
 {
 	int	i;
 
@@ -20,7 +34,7 @@ int		ft_is_there_virgos(char *str)
 	while (str[i])
 	{
 		if (str[i] == 34 || str[i] == 39)
-			return(1);
+			return (1);
 		i++;
 	}
 	return (0);
@@ -48,7 +62,6 @@ void	ft_clean_list(t_cmd *comandi)
 
 static void	ft_execute_child(t_prg *box, char **envp)
 {
-	int	exitStatus;
 	int	pipa[2];
 	int	pid;
 
@@ -63,7 +76,7 @@ static void	ft_execute_child(t_prg *box, char **envp)
 	}
 	else
 	{
-		waitpid(pid, &exitStatus, WNOHANG);
+		waitpid(pid, &g_exitstatus, WNOHANG);
 		close(pipa[1]);
 		dup2(pipa[0], 0);
 		close(pipa[0]);

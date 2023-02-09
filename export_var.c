@@ -6,11 +6,20 @@
 /*   By: aboncine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 18:07:22 by aboncine          #+#    #+#             */
-/*   Updated: 2023/02/08 18:39:47 by aboncine         ###   ########.fr       */
+/*   Updated: 2023/02/09 12:39:01 by aboncine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	ft_check_if_trimmable(char *s1, size_t *first, size_t *last)
+{
+	if (s1[*first] == '\0')
+	{
+		*first = 0;
+		*last = 0;
+	}
+}
 
 int	ft_is_var_inside_quotes(char *s)
 {
@@ -39,7 +48,7 @@ int	ft_is_var_inside_quotes(char *s)
 
 static void	ft_export_not_valid_var(void)
 {
-	exitStatus = 1;
+	g_exitstatus = 1;
 	write(2, " not a valid identifier\n", 25);
 }
 
@@ -59,7 +68,7 @@ void	ft_export_var(char *prompt)
 
 	if (prompt[0] == '=' && prompt[1] == '\0')
 	{
-		exitStatus = 1;
+		g_exitstatus = 1;
 		write(2, "Error: not a valid identifier\n", 31);
 		return ;
 	}

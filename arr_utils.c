@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   arr_utils.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aboncine <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/09 11:04:58 by aboncine          #+#    #+#             */
+/*   Updated: 2023/02/09 11:05:15 by aboncine         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-static int		ft_how_many_strings(char **arr)
+static int	ft_how_many_strings(char **arr)
 {
 	int	i;
 
@@ -52,7 +64,6 @@ char	**ft_remove_string_from_arr(char **arr, int toremove)
 	i = 0;
 	b = 0;
 	res = malloc(sizeof(char *) * (ft_how_many_strings(arr)));
-	//str = ft_strjoin(str, "=");
 	while (arr[i] != 0)
 	{
 		if (i != toremove)
@@ -70,7 +81,7 @@ char	**ft_remove_string_from_arr(char **arr, int toremove)
 		b++;
 	}
 	free(arr);
-	return(res);
+	return (res);
 }
 
 // int		ft_is_str_in_arr(char **arr, char *s)

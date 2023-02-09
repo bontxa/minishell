@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   newmain.c                                          :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aboncine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 15:48:16 by aboncine          #+#    #+#             */
-/*   Updated: 2023/02/08 18:11:22 by aboncine         ###   ########.fr       */
+/*   Updated: 2023/02/09 12:41:56 by aboncine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	exitStatus;
+int	g_exitstatus;
 
 static void	ft_main_part_3(char **cmd_args, t_prg box, char **envp)
 {
@@ -33,7 +33,7 @@ static char	**ft_main_part_2_bis(char **cmd_args)
 		if (cmd_args[2] != 0 && cmd_args[1][0] != '|' && cmd_args[1][0] != '>'
 			&& cmd_args[1][0] != '<')
 		{
-			exitStatus = 1;
+			g_exitstatus = 1;
 			return (NULL);
 		}
 		if (cmd_args[1] && cmd_args[1][0] != '|' && cmd_args[1][0] != '>'
@@ -105,10 +105,10 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
-	exitStatus = 0;
+	g_exitstatus = 0;
 	shell_prompt = "@sovietshell: \033[0;37m";
 	tmp = ft_strjoin("\033[1;31m", getenv("LOGNAME"));
 	shell_prompt = ft_strjoin(tmp, shell_prompt);
 	ft_do_everything(shell_prompt, envp);
-	exit (exitStatus);
+	exit (g_exitstatus);
 }

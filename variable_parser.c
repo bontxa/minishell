@@ -6,14 +6,13 @@
 /*   By: aboncine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 11:50:51 by aboncine          #+#    #+#             */
-/*   Updated: 2023/02/08 13:17:45 by aboncine         ###   ########.fr       */
+/*   Updated: 2023/02/09 12:56:02 by aboncine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-
-static char	*extract_var_4(char *s, char *res, int *i, char	*prima)
+static char	*ft_extract_var_4(char *s, char *res, int *i, char *prima)
 {
 	char	*dopo;
 	char	*tmp;
@@ -21,42 +20,25 @@ static char	*extract_var_4(char *s, char *res, int *i, char	*prima)
 	int		flag;
 
 	flag = 0;
+	tmp2 = NULL;
 	dopo = ft_strncpy(s, *i, ft_strlen(s));
 	if (res[0] == '\0')
 	{
-		tmp = ft_itoa(exitStatus);
+		tmp = ft_itoa(g_exitstatus);
 		flag = 1;
 	}
 	else
-	{
-		tmp = getenv(res);
-		if (!tmp)
-		{
-			tmp = malloc(1);
-			tmp[0] = '\0';
-			flag = 1;
-		}
-	}
+		tmp = ft_ft_extract_var_getenv(res, &flag);
 	res = ft_strjoin(prima, tmp);
 	free(prima);
 	if (flag == 1)
 		free(tmp);
-	if (dopo[0] != '\0')
-	{
-		tmp2 = ft_strjoin(res, dopo);
-		free (s);
-		free(res);
-		free(dopo);
-		return (tmp2);
-	}
-	free(s);
-	free(dopo);
-	return (res);
+	return (ft_extact_var_free(dopo, tmp2, res, s));
 }
 
-static char	*extract_var_3(char *s, int *i, int *b)
+static char	*ft_ft_extract_var_3(char *s, int *i, int *b)
 {
-	int	x;
+	int		x;
 	char	*res;
 
 	x = 0;
@@ -74,7 +56,7 @@ static char	*extract_var_3(char *s, int *i, int *b)
 	return (res);
 }
 
-static char	*extract_var_2(char *s, int *i, int *b)
+static char	*ft_ft_extract_var_2(char *s, int *i, int *b)
 {
 	char	*res;
 
@@ -86,7 +68,20 @@ static char	*extract_var_2(char *s, int *i, int *b)
 	return (res);
 }
 
-char	*extract_var(char *s)
+char	*ft_extract_g_exitstatus(int *i, char *s, char *prima)
+{
+	char	*res;
+	char	*tmp;
+
+	*i = *i + 1;
+	res = malloc(1);
+	res[0] = '\0';
+	tmp = ft_extract_var_4(s, res, i, prima);
+	free(res);
+	return (tmp);
+}
+
+char	*ft_extract_var(char *s)
 {
 	int		i;
 	int		b;
@@ -103,19 +98,12 @@ char	*extract_var(char *s)
 		i++;
 	b = i;
 	if (s[b] == '?')
-	{
-		i++;
-		res = malloc(2);
-		res[0] = '\0';
-		tmp = extract_var_4(s, res, &i, prima);
-		free(res);
-		return (tmp);
-	}
+		return (ft_extract_g_exitstatus(&i, s, prima));
 	if (s[b] >= '0' && s[b] <= '9')
-		res = extract_var_2(s, &i, &b);
+		res = ft_ft_extract_var_2(s, &i, &b);
 	else
-		res = extract_var_3(s, &i, &b);
-	tmp = extract_var_4(s, res, &i, prima);
+		res = ft_ft_extract_var_3(s, &i, &b);
+	tmp = ft_extract_var_4(s, res, &i, prima);
 	free(res);
 	return (tmp);
 }

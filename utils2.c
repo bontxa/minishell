@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ltombell <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aboncine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 12:16:27 by aboncine          #+#    #+#             */
-/*   Updated: 2023/02/03 13:20:57 by ltombell         ###   ########.fr       */
+/*   Updated: 2023/02/09 12:23:38 by aboncine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	variable_expander(char **prompt)
 		if (ft_is_var_inside_quotes(prompt[i]) == 0)
 		{
 			while (is_there_a_dollar(prompt[i]) == 1)
-				prompt[i] = extract_var(prompt[i]);
+				prompt[i] = ft_extract_var(prompt[i]);
 			i++;
 		}
 		else

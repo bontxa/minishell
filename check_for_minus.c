@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_for_minus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ltombell <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aboncine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 12:07:52 by aboncine          #+#    #+#             */
-/*   Updated: 2023/02/07 18:02:28 by ltombell         ###   ########.fr       */
+/*   Updated: 2023/02/09 12:38:22 by aboncine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 static char	**ft_remove_from_arr(char **full_cmd, int i)
 {
-	int	b;
-	char **res;
+	int		b;
+	char	**res;
 
 	b = 0;
 	i++;
@@ -31,20 +31,13 @@ static char	**ft_remove_from_arr(char **full_cmd, int i)
 
 static void	ft_check_for_minus_3(t_cmd *elem, int i)
 {
-	// int f = 0;
-	// printf("entro\n");
-	// while (elem->full_cmd[f] != 0)
-	// {
-	// 	printf("dopo parse %s\n", elem->full_cmd[f]);
-	// 	f++;
-	// }
 	if (elem->full_cmd[i + 1])
 	{
 		elem->infile = open(elem->full_cmd[i + 1], O_RDONLY);
 		if (elem->infile < 0)
 		{
 			write(2, "unable to open file\n", 21);
-			exitStatus = 1;
+			g_exitstatus = 1;
 		}
 	}
 	else
@@ -52,21 +45,8 @@ static void	ft_check_for_minus_3(t_cmd *elem, int i)
 		printf("errore nell'infile, parametro scorretto\n");
 		return ;
 	}
-	// printf("i + 1 = %s,	i - 1 = %s\n", elem->full_cmd[i + 1], elem->full_cmd[i - 1]);
 	elem->full_cmd = ft_remove_string_from_arr(elem->full_cmd, i);
-	//int x = 0;
-	// while (elem->full_cmd[x] != 0)
-	// {
-	// 	printf("da fullcmd %s\n", elem->full_cmd[x]);
-	// 	x++;
-	// }
 	elem->full_cmd = ft_remove_string_from_arr(elem->full_cmd, i);
-	// int x = 0;
-	// while (elem->full_cmd[x] != 0)
-	// {
-	// 	printf("da fullcmd %s\n", elem->full_cmd[x]);
-	// 	x++;
-	// }
 }
 
 static void	ft_check_for_minus_2(t_cmd *elem, int i)
@@ -83,10 +63,8 @@ void	ft_check_for_minus(t_cmd *elem)
 	i = 0;
 	while (elem->full_cmd[i] != 0)
 	{
-		//printf("sto controllando %s, i = %d\n", elem->full_cmd[i], i);
 		if (elem->full_cmd[i][0] == '<')
 		{
-			//printf("trovato!\n");
 			if (elem->full_cmd[i][1] && elem->full_cmd[i][1] == '<')
 				ft_check_for_minus_2(elem, i);
 			else
@@ -96,8 +74,7 @@ void	ft_check_for_minus(t_cmd *elem)
 			}
 		}
 		if (elem->full_cmd[i] == NULL)
-			break;
+			break ;
 		i++;
 	}
-
 }

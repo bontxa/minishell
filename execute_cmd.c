@@ -3,37 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   execute_cmd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ltombell <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aboncine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 12:12:33 by aboncine          #+#    #+#             */
-/*   Updated: 2023/02/07 17:56:41 by ltombell         ###   ########.fr       */
+/*   Updated: 2023/02/09 12:37:58 by aboncine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int		is_there_a_pipe(char *s)
-{
-	int	i;
-
-	i = 0;
-	while (s[i])
-	{
-		if (s[i] == '|')
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
-int		check_for_pipes(char **s)
+int	check_for_pipes(char **s)
 {
 	int	i;
 
 	i = 0;
 	while (s[i] != 0)
 	{
-		if (is_there_a_pipe(s[i]) == 1)
+		if (ft_is_there_a_pipe(s[i]) == 1)
 			return (1);
 		i++;
 	}
@@ -74,7 +60,7 @@ static void	execute_cmd_3(char **cmd_args, char **envp)
 		cmd_paths[i] = ft_strjoin(tmp, cmd_args[0]);
 		free(tmp);
 		if (access(cmd_paths[i], F_OK) == 0)
-			break;
+			break ;
 	}
 	if (cmd_paths[i] == 0)
 	{
@@ -119,9 +105,8 @@ void	execute_cmd(char **cmd_args, char **envp)
 	}
 	else if (!ft_strncmp(cmd_args[0], "export", 6))
 	{
-		//printf("trattasi di export\n");
 		ft_print_export();
-		exit (exitStatus);
+		exit (g_exitstatus);
 	}
 	else if (ft_strncmp(cmd_args[0], "echo", 4) == 0)
 		execute_cmd_2(cmd_args);
