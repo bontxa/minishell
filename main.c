@@ -6,7 +6,7 @@
 /*   By: aboncine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 15:48:16 by aboncine          #+#    #+#             */
-/*   Updated: 2023/02/09 12:41:56 by aboncine         ###   ########.fr       */
+/*   Updated: 2023/02/21 18:17:36 by aboncine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,6 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	g_exitstatus = 0;
-	shell_prompt = "@sovietshell: \033[0;37m";
 	tmp = ft_strjoin("\033[1;31m", getenv("LOGNAME"));
 	shell_prompt = ft_strjoin(tmp, shell_prompt);
 	ft_do_everything(shell_prompt, envp);
