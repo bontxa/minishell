@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aboncine <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aboncine <aboncine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 12:45:27 by aboncine          #+#    #+#             */
-/*   Updated: 2023/02/09 12:55:24 by aboncine         ###   ########.fr       */
+/*   Updated: 2023/03/10 13:03:30 by aboncine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,5 +95,7 @@ void	ft_check_if_trimmable(char *s1, size_t *first, size_t *last);
 char	*ft_extact_var_free(char *dopo, char *tmp2, char *res, char *s);
 char	*ft_ft_extract_var_getenv(char *res, int *flag);
 int		ft_atoi(const char *nptr);
+void	ft_cd(char **cmd_args);
+void	ft_print_header(void);
 
 #endif

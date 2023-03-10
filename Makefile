@@ -19,7 +19,7 @@ SRCS = main.c execute_cmd.c variable_parser.c utils.c utils2.c utils3.c \
 	variable_parser_2.c
 OBJS = $(SRCS:.c=.o)
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g
 
 %.o: %.c
 	$(CC) -c $(CFLAGS) $?
